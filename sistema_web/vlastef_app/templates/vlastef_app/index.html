@@ -1,0 +1,75 @@
+{% extends "vlastef_app/layout.html" %}
+{% load static %}
+
+{% block title %}Iniciar sesión{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'vlastef_app/css/login.css' %}">
+{% endblock %}
+
+{% block body %}
+    <div class="card">
+    <section class="hero">
+      <div>
+        <div class="brand">
+          <div class="logo"></div>
+          <div style="font-weight:600">YOUR LOGO</div>
+        </div>
+        <h1>Hola, Bienvenidos a Moda Vlastef!</h1>
+        <p>Todo lo que deseas en un solo lugar.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      {# Use a Django form POST so authentication happens on the server #}
+      <form method="post" id="loginForm" novalidate>
+        {% csrf_token %}
+        <label class="muted">Email address</label>
+        <input id="email" name="email" class="input" type="email" placeholder="name@mail.com" value="{{ request.POST.email|default_if_none:'' }}" />
+
+        <label class="muted">Password</label>
+        <!-- campo de contraseña con ojito -->
+        <div class="field-with-icon">
+          <input id="password" name="password" class="input" type="password" placeholder="••••••••" />
+          <button type="button" class="toggle-pass" aria-label="Mostrar contraseña" title="Mostrar contraseña">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+
+        {# Server-side error message (from views.py) #}
+        {% if error %}
+          <div id="loginErrors" style="color:#b00020;font-size:13px;margin-top:8px;display:block">{{ error }}</div>
+        {% else %}
+          <div id="loginErrors" style="color:#b00020;font-size:13px;margin-top:8px;display:none"></div>
+        {% endif %}
+
+        {# Django messages (e.g., registro exitoso) #}
+        {% if messages %}
+          {% for message in messages %}
+            <div style="margin-top:8px;color:green">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        <div class="row" style="justify-content:space-between;margin-top:6px;margin-bottom:14px">
+          <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" name="remember"/> Remember me</label>
+          <a class="muted" href="#">Forgot password?</a>
+        </div>
+
+        <div class="actions">
+          <button id="btnLogin" class="btn" type="submit">Login</button>
+          {# Use Django URL for register view #}
+          <a class="btn secondary" href="{% url 'register' %}">Sign up</a>
+        </div>
+      </form>
+
+      <div class="social">FOLLOW • <span>fb</span> <span>tw</span> <span>ig</span></div>
+    </section>
+  </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'vlastef_app/js/login.js' %}"></script>
+{% endblock %}

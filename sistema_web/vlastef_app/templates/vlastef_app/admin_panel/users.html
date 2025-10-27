@@ -1,0 +1,41 @@
+{% extends "vlastef_app/layout.html" %}
+{% load static %}
+
+{% block title %}Usuarios - Admin{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'vlastef_app/css/home.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h1>Usuarios y Clientes</h1>
+  <form method="get" style="margin:12px 0">
+    <input type="text" name="q" placeholder="Buscar por usuario, correo o nombre" value="{{ query }}" class="input">
+    <button class="btn" type="submit">Buscar</button>
+  </form>
+
+  <table style="width:100%;border-collapse:collapse">
+    <thead>
+      <tr style="text-align:left;background:#f6f6f6">
+        <th style="padding:8px">Usuario</th>
+        <th>Email</th>
+        <th>Nombre</th>
+        <th>Cliente</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+      <tr>
+        <td style="padding:8px">{{ u.username }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.first_name }} {{ u.last_name }}</td>
+        <td>{% if u.id in client_user_ids %}Sí{% else %}No{% endif %}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">No se encontraron usuarios</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+/* ...existing code... */
+:root{
+  --purple-600: #5b2bd6;
+  --purple-500: #6f3be0;
+  --purple-400: #8a67f3;
+  --bg: linear-gradient(180deg,#f7f5fb 0%, #efe9ff 100%);
+  --card-shadow: 0 10px 30px rgba(11,9,23,0.12);
+  --muted: #8a8798;
+}
+
+*{box-sizing:border-box;font-family:Inter,Segoe UI,Arial,sans-serif}
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  color:#0b0a17;
+}
+
+.card{
+  width:920px;
+  max-width:100%;
+  height:520px;
+  display:flex;
+  box-shadow:var(--card-shadow);
+  border-radius:10px;
+  overflow:hidden;
+  background:transparent;
+}
+
+/* Lado izquierdo: imagen + overlay morado */
+.hero{
+  flex:1.2;
+  padding:56px 48px;
+  color:#fff;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  position:relative;
+  background:
+    linear-gradient(135deg, rgba(91,43,214,0.86), rgba(111,59,224,0.78)),
+    url("assets/e723d92fc25c0fdd10c63ad7d0bcc273.jpg") center/cover no-repeat;
+  background-blend-mode:overlay;
+}
+
+/* pequeño bloque blanco translúcido para logo */
+.hero .brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:20px;
+}
+.hero .brand .logo{
+  width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.12);display:inline-block;
+}
+.hero h1{font-size:44px;margin:0 0 12px;line-height:1.02;font-weight:700}
+.hero p{max-width:360px;opacity:.92;margin:0;color:rgba(255,255,255,0.92)}
+
+/* Panel derecho: formulario minimalista */
+.panel{
+  flex:0.9;
+  background:#fff;
+  padding:44px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:8px;
+}
+
+.muted{color:var(--muted);font-size:13px}
+.input{
+  width:100%;
+  padding:12px 14px;
+  border:2px solid rgba(99,83,155,0.12);
+  border-radius:8px;
+  margin-bottom:12px;
+  font-size:14px;
+  outline:none;
+  transition:box-shadow .15s, border-color .15s;
+}
+.input:focus{
+  border-color:var(--purple-600);
+  box-shadow:0 6px 18px rgba(95,46,212,0.12);
+}
+
+/* filas y botones */
+.row{display:flex;gap:12px;align-items:center}
+.actions{display:flex;gap:12px;margin-top:6px}
+.btn{
+  display:inline-block;padding:10px 18px;border-radius:8px;background:var(--purple-600);
+  color:#fff;border:none;cursor:pointer;font-weight:600;
+  box-shadow:0 6px 14px rgba(91,43,214,0.14);
+}
+.btn.secondary{
+  background:#fff;color:var(--purple-600);
+  border:2px solid var(--purple-600);
+  box-shadow:none;
+}
+
+/* enlaces y footer */
+.panel a{color:var(--muted);text-decoration:none;font-size:13px}
+.social{margin-top:28px;color:#b5b2c9;display:flex;gap:10px;align-items:center;font-size:13px}
+
+/* responsive */
+@media (max-width:880px){
+  .card{flex-direction:column;height:auto}
+  .hero{order:2;padding:36px;border-radius:10px 10px 0 0}
+  .panel{order:1;border-radius:0 0 10px 10px}
+  .hero h1{font-size:32px}
+}

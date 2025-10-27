@@ -1,0 +1,192 @@
+{% extends "vlastef_app/layout.html" %}
+{% load static %}
+
+{% block title %}Home - Moda Vlastef{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'vlastef_app/css/home.css' %}">
+{% endblock %}
+
+{% block body %}
+<header class="topbar">
+    <div class="logo">Moda Vlastef</div>
+    <div class="search" role="search">
+      <input id="searchInput" placeholder="Busca productos, marcas y más..." />
+      <button onclick="search()">Buscar</button>
+    </div>
+    <div class="icons" id="headerIcons">
+      <div id="profileToggle" class="profile-mini" title="Perfil" style="display:none">
+        <img id="profileImgMini" src="https://via.placeholder.com/40" alt="Perfil" style="width:36px;height:36px;border-radius:50%">
+      </div>
+
+      <!-- Cart button (abre modal) -->
+      <button id="cart-button" title="Carrito" style="font-size:16px">🛒 <span id="cart-count">Carrito (0)</span></button>
+      {% if user.is_authenticated %}
+        <a href="{% url 'logout' %}" style="color:#fff;margin-left:12px">Cerrar sesión</a>
+      {% endif %}
+    </div>
+  </header>
+
+  <main class="container" id="mainContent" aria-hidden="true">
+    <!-- CONTENIDO TIPO MARKETPLACE: Banner, categorias y grid de productos -->
+    <section class="hero" aria-hidden="false">
+      <div class="text">
+        <h1 style="margin:0 0 6px">Bienvenido a Moda Vlastef{% if user %}, {{ user.username }}{% endif %}</h1>
+        <p style="margin:0;color:var(--muted)">Encuentra las mejores ofertas en ropa, accesorios y más. Explora categorías o busca directamente un producto.</p>
+      </div>
+      <img class="banner-img" src="https://images.unsplash.com/photo-1520975698515-1f8c7eea3f9c?q=80&w=600&auto=format&fit=crop&ixlib=rb-4.0.3&s=1" alt="Banner">
+    </section>
+
+    <nav class="categories" id="categories" aria-label="Categorías">
+      <div class="category active" data-cat="todos">Todo</div>
+      <div class="category" data-cat="mujer">Mujer</div>
+      <div class="category" data-cat="hombre">Hombre</div>
+      <div class="category" data-cat="accesorios">Accesorios</div>
+      <div class="category" data-cat="calzado">Calzado</div>
+      <div class="category" data-cat="ofertas">Ofertas</div>
+    </nav>
+
+    <div class="filters-bar">
+      <div class="filters-left">
+        <label style="font-size:14px;color:var(--muted)">Mostrar:</label>
+        <select id="sortSelect" class="small-btn">
+          <option value="popular">Más populares</option>
+          <option value="price_asc">Precio: menor a mayor</option>
+          <option value="price_desc">Precio: mayor a menor</option>
+          <option value="new">Novedades</option>
+        </select>
+      </div>
+      <div class="filters-right">
+        <div style="font-size:14px;color:var(--muted)">Resultados: <span id="resultsCount">0</span></div>
+      </div>
+    </div>
+
+    <section id="productGrid" class="product-grid" aria-live="polite">
+      {% for p in products %}
+        <div class="product-card" data-id="{{ p.id }}" data-price="{{ p.price }}" data-title="{{ p.title|escape }}" data-img="{{ p.img }}">
+          <img src="{{ p.img }}" alt="{{ p.title|escape }}">
+          <div class="product-title">{{ p.title }}</div>
+          <div class="price-row">
+            <div>
+              <div class="price">${{ p.price }}</div>
+              {% if p.oldPrice %}<div class="old-price">${{ p.oldPrice }}</div>{% endif %}
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:12px;color:var(--muted)">Envio: <strong>Gratis</strong></div>
+            </div>
+          </div>
+          <div class="product-actions">
+            <button class="small-btn add-to-cart" data-id="{{ p.id }}">Añadir al carrito</button>
+            <button class="primary-btn buy-now" data-id="{{ p.id }}">Comprar ahora</button>
+          </div>
+        </div>
+      {% empty %}
+        <div style="grid-column:1/-1;padding:24px;text-align:center;color:var(--muted)">No hay productos disponibles</div>
+      {% endfor %}
+    </section>
+
+  </main>
+
+  <!-- Panel de perfil MEJORADO -->
+  <div id="profilePanel" aria-hidden="true">
+    <div class="head">
+      <img id="profileImg" src="https://via.placeholder.com/80" alt="Foto" onclick="openPhotoModal()" title="Haz clic para cambiar tu foto">
+      <div>
+        <div id="profileName" class="name">Antony Garay</div>
+        <div id="profileEmail" class="email">jhonnyanthony1185@gmail.com</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Haz clic en la foto para cambiarla</div>
+      </div>
+    </div>
+    
+    <!-- Sección Identificate -->
+    <div class="profile-section">
+      <div class="profile-section-title">Identificate</div>
+      <div class="profile-option" onclick="navigateTo('registrarse')">
+        <div class="profile-option-icon">👤</div>
+        <div class="profile-option-text">Registrarse</div>
+      </div>
+      <div class="profile-option" onclick="navigateTo('mis-pedidos')">
+        <div class="profile-option-icon">📦</div>
+        <div class="profile-option-text">Mis Pedidos</div>
+      </div>
+      <div class="profile-option" onclick="navigateTo('centro-mensajes')">
+        <div class="profile-option-icon">💬</div>
+        <div class="profile-option-text">Centro de Mensajes</div>
+      </div>
+      <div class="profile-option" onclick="navigateTo('pago')">
+        <div class="profile-option-icon">💳</div>
+        <div class="profile-option-text">Pago</div>
+      </div>
+      <div class="profile-option" onclick="navigateTo('lista-deseos')">
+        <div class="profile-option-icon">❤️</div>
+        <div class="profile-option-text">Lista de deseos</div>
+      </div>
+      <div class="profile-option" onclick="navigateTo('mis-cupones')">
+        <div class="profile-option-icon">🎫</div>
+        <div class="profile-option-text">Mis Cupones</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal para cambiar foto de perfil -->
+  <div id="photoModal" class="photo-modal">
+    <div class="photo-modal-content">
+      <h3 style="margin:0 0 16px 0">Cambiar foto de perfil</h3>
+      <input type="file" id="photoInput" accept="image/*" style="display:none">
+      <img id="photoPreview" class="photo-preview" alt="Vista previa">
+      <div style="margin:16px 0">
+        <button onclick="document.getElementById('photoInput').click()" class="photo-btn secondary">
+          Elegir foto
+        </button>
+      </div>
+      <div class="photo-actions">
+        <button onclick="closePhotoModal()" class="photo-btn secondary">Cancelar</button>
+        <button onclick="savePhoto()" class="photo-btn primary">Guardar foto</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Carrito modal (markup requerido por perfil.js) -->
+  <div id="cartModal" class="cart-modal" aria-hidden="true" style="display:none;position:fixed;right:20px;top:70px;width:360px;max-height:70vh;background:#fff;border-radius:10px;box-shadow:0 18px 50px rgba(0,0,0,.2);overflow:hidden;z-index:2000;flex-direction:column">
+    <div class="cart-header" style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid #f0f0f0">
+      <strong>Tu carrito</strong>
+      <div><button id="closeCart" class="small-btn">Cerrar</button></div>
+    </div>
+
+    <div style="padding:8px 12px;border-bottom:1px solid #f6f6f6">
+      <label class="select-all"><input type="checkbox" id="selectAll"> Seleccionar todo</label>
+    </div>
+
+    <div id="cartList" class="cart-list" style="overflow:auto;padding:10px;display:flex;flex-direction:column;gap:10px"></div>
+    <div id="cartEmpty" class="empty" style="display:none;padding:18px;text-align:center;color:#666">Tu carrito está vacío</div>
+
+    <div class="cart-footer" style="padding:12px;border-top:1px solid #f0f0f0;background:#fff;display:flex;flex-direction:column;gap:8px">
+      <div class="totals" style="display:flex;flex-direction:column;gap:6px;font-size:14px">
+        <div style="display:flex;justify-content:space-between"><span>Subtotal:</span><span id="subtotal">$0.00</span></div>
+        <div style="display:flex;justify-content:space-between"><span>IVA (12%):</span><span id="iva">$0.00</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Descuento:</span><span id="discount">-$0.00</span></div>
+        <div style="display:flex;justify-content:space-between;font-weight:700"><span>Total:</span><span id="total">$0.00</span></div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button id="clearCart" class="small-btn" style="flex:1">Vaciar carrito</button>
+        <button id="buyBtn" class="buy-btn" style="flex:1;background:var(--brand,#b700ff);color:#fff;border-radius:8px;padding:10px;border:0;cursor:pointer">Comprar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Overlay si no hay login -->
+  {% if not user.is_authenticated %}
+  <div id="lockedOverlay" class="locked" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.45);z-index:999">
+    <div class="panel" style="background:#fff;padding:24px;border-radius:10px;text-align:center;max-width:420px">
+      <h2>Necesitas iniciar sesión</h2>
+      <p>Inicia sesión para continuar.</p>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+        <a href="{% url 'index' %}" class="btn">Ir al login</a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  
+  {% block extra_js %}{% endblock %}
+{% endblock %}

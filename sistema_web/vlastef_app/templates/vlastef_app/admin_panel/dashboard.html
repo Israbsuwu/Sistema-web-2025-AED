@@ -1,0 +1,51 @@
+{% extends "vlastef_app/layout.html" %}
+{% load static %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'vlastef_app/css/home.css' %}">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <h1>Panel de control</h1>
+  <div style="display:flex;gap:16px;margin-top:16px;flex-wrap:wrap">
+    <div style="background:#2ecc71;color:#fff;padding:20px;border-radius:8px;min-width:180px;text-align:center">
+      <div style="font-size:28px">{{ users_count }}</div>
+      <div>Usuarios</div>
+    </div>
+
+    <div style="display:flex;gap:16px;margin-top:16px;flex-wrap:wrap">
+      <div style="background:#3498db;color:#fff;padding:20px;border-radius:8px;min-width:180px;text-align:center">
+        <div style="font-size:28px">{{ categories_count }}</div>
+        <div>Categorías</div>
+      </div>
+      <div style="background:#e67e22;color:#fff;padding:20px;border-radius:8px;min-width:180px;text-align:center">
+        <div style="font-size:28px">{{ suppliers_count }}</div>
+        <div>Proveedores</div>
+      </div>
+      <div style="background:#e74c3c;color:#fff;padding:20px;border-radius:8px;min-width:180px;text-align:center">
+        <div style="font-size:28px">{{ comments_count }}</div>
+        <div>Comentarios</div>
+      </div>
+      <div style="background:#34495e;color:#fff;padding:20px;border-radius:8px;min-width:180px;text-align:center">
+        <div style="font-size:28px">{{ stock_movements_count }}</div>
+        <div>Movimientos de stock</div>
+      </div>
+    </div>
+    <div style="background:#f1c40f;color:#fff;padding:20px;border-radius:8px;min-width:180px;text-align:center">
+      <div style="font-size:28px">{{ clients_count }}</div>
+      <div>Clientes</div>
+    </div>
+    <div style="background:#9b59b6;color:#fff;padding:20px;border-radius:8px;min-width:180px;text-align:center">
+      <div style="font-size:28px">{{ products_count }}</div>
+      <div>Productos</div>
+    </div>
+  </div>
+
+  <div style="margin-top:24px">
+    <a class="btn" href="{% url 'admin_users' %}">Ver usuarios y clientes</a>
+  </div>
+</div>
+{% endblock %}
