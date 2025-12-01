@@ -18,7 +18,7 @@ cd SISTEMA-WEB-2025-AED
 4. Coloca en la terminal lo siguiente para instalar las dependencias:
 
 ```bash
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 
 5. Luego a la carpeta del proyecto Django:
@@ -55,3 +55,6 @@ python manage.py runserver
 ```
 
 12. En la terminal encontrarás un enlace donde al presionar 'control + clic' te llevará a la página web.
+\
+Estando en la página tienes la opción de iniciar sesión o registrar una cuenta.\
+Puedes iniciar sesión con el superusuario creado poniéndolo en el login junto con su contraseña.

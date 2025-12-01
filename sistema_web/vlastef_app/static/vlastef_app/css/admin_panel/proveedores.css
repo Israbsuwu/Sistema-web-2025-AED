@@ -1,0 +1,480 @@
+/* Estilos para proveedores.html */
+.proveedores-panel {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+	padding: 32px 24px;
+	margin: 32px auto;
+	max-width: 1200px;
+}
+
+.proveedores-title {
+	font-size: 2rem;
+	font-weight: 700;
+	margin-bottom: 8px;
+	color: #4c1d95;
+}
+
+.proveedores-count {
+	color: #232b3e;
+	font-size: 1rem;
+	margin-bottom: 24px;
+	font-weight: 500;
+}
+
+.proveedores-actions {
+	margin-bottom: 18px;
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
+}
+
+.proveedores-search-form {
+	display: flex;
+	gap: 8px;
+}
+
+.proveedores-search-input {
+	padding: 8px 12px;
+	border: 1px solid #cbd5e1;
+	border-radius: 6px;
+	font-size: 1rem;
+	width: 220px;
+}
+
+.proveedores-search-btn {
+	background: #6d28d9;
+	color: #fff;
+	border: none;
+	border-radius: 6px;
+	padding: 8px 18px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.proveedores-search-btn:hover {
+	background: #5b21b6;
+}
+
+.btn-crear {
+	background: #22c55e;
+	color: #fff;
+	padding: 8px 18px;
+	border-radius: 6px;
+	font-weight: 600;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	transition: background 0.2s;
+}
+
+.btn-crear:hover {
+	background: #16a34a;
+}
+
+.proveedores-table-wrapper {
+	background: #fff;
+	border: 1px solid #e5e7eb;
+	border-radius: 10px;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+	overflow-x: auto;
+}
+
+.proveedores-table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 8px;
+	background: #fff;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.proveedores-table th,
+.proveedores-table td {
+	padding: 12px 10px;
+	text-align: center;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.proveedores-table th {
+	background: #4c1d95;
+	font-weight: 700;
+	color: #fff;
+}
+
+.proveedores-table tr:last-child td {
+	border-bottom: none;
+}
+
+.action-buttons-grid {
+	display: flex;
+	justify-content: center;
+	gap: 6px;
+}
+
+.btn-editar,
+.btn-eliminar {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 6px 10px;
+	border-radius: 5px;
+	font-size: 0.9rem;
+	font-weight: 500;
+	text-decoration: none;
+	transition: background 0.2s, color 0.2s;
+	text-align: center;
+	border: none;
+	cursor: pointer;
+}
+
+/* Botón Ver */
+.btn-detalle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 6px 10px;
+	border-radius: 5px;
+	font-size: 0.9rem;
+	font-weight: 500;
+	text-decoration: none;
+	transition: background 0.2s, color 0.2s;
+	text-align: center;
+	background: #f1f5f9;
+	color: #2563eb;
+}
+.btn-detalle:hover { background: #dbeafe; color: #1d4ed8; }
+
+.btn-editar {
+	background: #fef9c3;
+	color: #b45309;
+}
+
+.btn-eliminar {
+	background: #fca5a5;
+	color: #991b1b;
+}
+
+.btn-editar:hover {
+	background: #fde68a;
+	color: #92400e;
+}
+
+.btn-eliminar:hover {
+	background: #f87171;
+	color: #7f1d1d;
+}
+
+.no-proveedores {
+	text-align: center;
+	color: #64748b;
+	font-style: italic;
+	padding: 24px 0;
+}
+
+/* Formulario */
+.proveedor-form-panel {
+	max-width: 820px;
+	margin: 32px auto;
+	padding: 0 16px;
+}
+
+.form-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 18px;
+}
+
+.proveedor-form-title {
+	font-size: 1.8rem;
+	font-weight: 800;
+	color: #4c1d95;
+	margin: 0;
+}
+
+.btn-volver {
+	background: #e5e7eb;
+	color: #111827;
+	padding: 8px 14px;
+	border-radius: 8px;
+	text-decoration: none;
+	font-weight: 600;
+}
+
+.btn-volver:hover {
+	background: #d1d5db;
+}
+
+.form-card {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+	padding: 32px;
+}
+
+.form-row {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 32px;
+}
+
+.form-group {
+	margin-bottom: 20px;
+}
+
+.form-group label {
+	display: block;
+	font-size: 0.95rem;
+	color: #374151;
+	font-weight: 700;
+	margin-bottom: 8px;
+}
+
+.form-input {
+	width: 100%;
+	padding: 10px 12px;
+	border: 1px solid #cbd5e1;
+	border-radius: 8px;
+	font-size: 1rem;
+}
+
+.form-input:focus {
+	outline: none;
+	border-color: #6d28d9;
+	box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.12);
+}
+
+.hint {
+	color: #6b7280;
+	font-size: 0.85rem;
+}
+
+.error-text {
+	color: #dc2626;
+	font-size: 0.9rem;
+	margin-top: 4px;
+}
+
+.form-errors {
+	color: #b91c1c;
+	margin-bottom: 10px;
+}
+
+.form-actions {
+	display: flex;
+	gap: 12px;
+	justify-content: flex-end;
+	margin-top: 16px;
+}
+
+.btn-guardar {
+	background: #6d28d9;
+	color: #fff;
+	border: none;
+	padding: 10px 18px;
+	border-radius: 8px;
+	font-weight: 700;
+	cursor: pointer;
+}
+
+.btn-guardar:hover {
+	background: #5b21b6;
+}
+
+.btn-cancelar {
+	background: #f3f4f6;
+	color: #111827;
+	padding: 10px 18px;
+	border-radius: 8px;
+	text-decoration: none;
+	font-weight: 700;
+}
+
+.btn-cancelar:hover {
+	background: #e5e7eb;
+}
+
+/* Modal & Alertas */
+.modal-backdrop {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.5);
+	backdrop-filter: blur(4px);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 1000;
+	animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+	background: #fff;
+	padding: 32px;
+	border-radius: 12px;
+	width: 90%;
+	max-width: 500px;
+	box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+	animation: slideUp 0.2s ease-out;
+}
+
+.modal-content h3 {
+	margin-top: 0;
+	color: #4c1d95;
+	font-size: 1.5rem;
+	margin-bottom: 16px;
+}
+
+.modal-content p {
+	color: #4a5568;
+	font-size: 1rem;
+	line-height: 1.5;
+	margin-bottom: 20px;
+}
+
+.modal-warning {
+	background: #fff5f5;
+	border: 1px solid #fed7d7;
+	border-radius: 8px;
+	padding: 16px;
+	margin-bottom: 24px;
+}
+
+.modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
+}
+
+.btn-cancelar {
+	background: #6d28d9;
+	color: #fff;
+	border: none;
+	padding: 10px 20px;
+	border-radius: 6px;
+	font-weight: 600;
+	cursor: pointer;
+	font-size: 1rem;
+	transition: background 0.2s;
+}
+
+.btn-cancelar:hover {
+	background: #5b21b6;
+}
+
+.btn-confirmar {
+	border: none;
+	padding: 10px 20px;
+	border-radius: 6px;
+	font-weight: 600;
+	cursor: pointer;
+	font-size: 1rem;
+	text-decoration: none;
+	display: inline-block;
+	transition: background 0.2s;
+}
+
+.btn-danger {
+	background: #ef4444;
+	color: #fff;
+}
+
+.btn-danger:hover {
+	background: #dc2626;
+}
+
+@keyframes fadeIn {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+@keyframes slideUp {
+	from { transform: translateY(20px); opacity: 0; }
+	to { transform: translateY(0); opacity: 1; }
+}
+
+.alert {
+	padding: 16px 24px;
+	border-radius: 8px;
+	font-weight: 600;
+	position: fixed;
+	top: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 9999;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	min-width: 300px;
+	text-align: center;
+	animation: slideDown 0.4s ease-out;
+}
+
+.alert.error {
+	background: #fee2e2;
+	color: #b91c1c;
+	border: 1px solid #fecaca;
+}
+
+.alert.success {
+	background: #dcfce7;
+	color: #15803d;
+	border: 1px solid #bbf7d0;
+}
+
+@keyframes slideDown {
+	from { top: -100px; opacity: 0; }
+	to { top: 20px; opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+	.form-row {
+		grid-template-columns: 1fr;
+		gap: 16px;
+	}
+	.form-card {
+		padding: 24px;
+	}
+}
+
+/* Extra separación primera columna */
+.form-row .form-group:nth-child(1) {
+	padding-right: 8px;
+}
+
+/* Resaltado de proveedor */
+.proveedor-highlight td {
+    position: relative;
+}
+
+.proveedor-highlight td::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-top: 2px solid #7c3aed;
+    border-bottom: 2px solid #7c3aed;
+    pointer-events: none;
+    opacity: 0;
+    animation: highlightFade 3s ease-out forwards;
+    z-index: 10;
+}
+
+.proveedor-highlight td:first-child::after {
+    border-left: 2px solid #7c3aed;
+}
+
+.proveedor-highlight td:last-child::after {
+    border-right: 2px solid #7c3aed;
+}
+
+@keyframes highlightFade {
+    0% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { opacity: 0; }
+}

@@ -1,0 +1,70 @@
+/* Estilos para cliente_detalle.html */
+.cliente-detalle-panel {
+    max-width: 900px;
+    margin: 32px auto;
+    padding: 0 20px;
+}
+.detalle-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+.detalle-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4c1d95;
+}
+.btn-volver {
+    background: #5b2bd6;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.btn-volver:hover {
+    background: #4321a8;
+}
+.detalle-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 32px;
+}
+.detalle-section {
+    margin-bottom: 32px;
+}
+.detalle-section:last-child {
+    margin-bottom: 0;
+}
+.detalle-section h3 {
+    font-size: 1.2rem;
+    color: #1f2937;
+    border-bottom: 2px solid #e5e7eb;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+}
+.detalle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+}
+.detalle-item {
+    display: flex;
+    flex-direction: column;
+}
+.detalle-item .label {
+    font-size: 0.85rem;
+    color: #4b5563;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+.detalle-item .value {
+    font-size: 1rem;
+    color: #1f2937;
+    font-weight: 500;
+}
+.estado-activo { color: #22c55e; font-weight: 700; }
+.estado-inactivo { color: #ef4444; font-weight: 700; }

@@ -1,0 +1,45 @@
+/* Estilos para dashboard.html */
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.btn-home-dashboard {
+    margin-left: auto;
+    display: inline-block;
+    padding: 10px 18px;
+    background: #5b2bd6;
+    color: #fff;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(91,43,214,0.10);
+    font-size: 1rem;
+    transition: background .15s;
+}
+
+.btn-home-dashboard:hover {
+    background: #4c24b3;
+}
+
+.dashboard-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+    margin-bottom: 32px;
+}
+
+.dashboard-row {
+    display: flex;
+    flex: 1 1 100%;
+    gap: 22px;
+}
+
+.dashboard-row + .dashboard-row {
+    margin-top: 18px;
+}
+
+.card-link {
+    text-decoration: none;
+}

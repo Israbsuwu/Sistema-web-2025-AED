@@ -1,51 +1,105 @@
-{% extends "vlastef_app/layout.html" %}
+{% extends 'vlastef_app/admin_panel/base.html' %}
 {% load static %}
 
-{% block title %}Admin Dashboard{% endblock %}
+{% block title %}Dashboard | Panel de Administración{% endblock %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'vlastef_app/css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/dashboard.css' %}">
 {% endblock %}
 
-{% block body %}
-<div class="container">
-  <h1>Panel de control</h1>
-  <div style="display:flex;gap:16px;margin-top:16px;flex-wrap:wrap">
-    <div style="background:#2ecc71;color:#fff;padding:20px;border-radius:8px;min-width:180px;text-align:center">
-      <div style="font-size:28px">{{ users_count }}</div>
-      <div>Usuarios</div>
+{% block main_content %}
+    <div class="dashboard-header">
+        <div class="dashboard-welcome">
+            <h2>¡Bienvenid@, {{ user.get_full_name|default:user.username }}!</h2>
+            <p>Este es tu panel de administración.</p>
+        </div>
+        <a href="{% url 'home' %}" class="btn-home-dashboard">Ir a la tienda</a>
     </div>
 
-    <div style="display:flex;gap:16px;margin-top:16px;flex-wrap:wrap">
-      <div style="background:#3498db;color:#fff;padding:20px;border-radius:8px;min-width:180px;text-align:center">
-        <div style="font-size:28px">{{ categories_count }}</div>
-        <div>Categorías</div>
-      </div>
-      <div style="background:#e67e22;color:#fff;padding:20px;border-radius:8px;min-width:180px;text-align:center">
-        <div style="font-size:28px">{{ suppliers_count }}</div>
-        <div>Proveedores</div>
-      </div>
-      <div style="background:#e74c3c;color:#fff;padding:20px;border-radius:8px;min-width:180px;text-align:center">
-        <div style="font-size:28px">{{ comments_count }}</div>
-        <div>Comentarios</div>
-      </div>
-      <div style="background:#34495e;color:#fff;padding:20px;border-radius:8px;min-width:180px;text-align:center">
-        <div style="font-size:28px">{{ stock_movements_count }}</div>
-        <div>Movimientos de stock</div>
-      </div>
-    </div>
-    <div style="background:#f1c40f;color:#fff;padding:20px;border-radius:8px;min-width:180px;text-align:center">
-      <div style="font-size:28px">{{ clients_count }}</div>
-      <div>Clientes</div>
-    </div>
-    <div style="background:#9b59b6;color:#fff;padding:20px;border-radius:8px;min-width:180px;text-align:center">
-      <div style="font-size:28px">{{ products_count }}</div>
-      <div>Productos</div>
-    </div>
-  </div>
+    <div class="dashboard-cards">
+        <div class="dashboard-row">
+            <a href="{% url 'admin_ventas' %}" class="card card-purple card-link">
+                <span class="icon">💸</span>
+                <span>Ventas</span>
+            </a>
 
-  <div style="margin-top:24px">
-    <a class="btn" href="{% url 'admin_users' %}">Ver usuarios y clientes</a>
-  </div>
-</div>
+            <a href="{% url 'admin_clientes' %}" class="card card-blue card-link">
+                <span class="icon">👥</span>
+                <span>Usuarios</span>
+            </a>
+
+            <a href="{% url 'admin_categorias' %}" class="card card-green card-link">
+                <span class="icon">📂</span>
+                <span>Categorías</span>
+            </a>
+
+                <a href="{% url 'admin_productos' %}" class="card card-teal card-link">
+                    <span class="icon">📦</span>
+                    <span>Productos</span>
+                </a>
+        </div>
+
+        <div class="dashboard-row">
+            <a href="{% url 'admin_carritos' %}" class="card card-yellow card-link">
+                <span class="icon">🛒</span>
+                <span>Carrito</span>
+            </a>
+
+            <a href="{% url 'admin_proveedores' %}" class="card card-pink card-link">
+                <span class="icon">🚚</span>
+                <span>Proveedores</span>
+            </a>
+
+            <a href="{% url 'admin_comentarios' %}" class="card card-orange card-link">
+                <span class="icon">💬</span>
+                <span>Comentarios</span>
+            </a>
+            
+            <a href="{% url 'admin_stock' %}" class="card card-brown card-link">
+                <span class="icon">📊</span>
+                <span>Stock</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="dashboard-lists">
+        <div class="list-section">
+            <h3>Últimas Ventas</h3>
+            {% if ultimas_ventas %}
+                <ul>
+                    {% for venta in ultimas_ventas %}
+                    <li>{{ venta }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay ventas registradas aún.</p>
+            {% endif %}
+        </div>
+
+        <div class="list-section">
+            <h3>Productos más vendidos</h3>
+            {% if productos_mas_vendidos %}
+                <ul>
+                    {% for producto in productos_mas_vendidos %}
+                        <li>{{ producto }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay productos más vendidos aún.</p>
+            {% endif %}
+        </div>
+        
+        <div class="list-section">
+            <h3>Productos añadidos recientemente</h3>
+            {% if productos_recientes %}
+                <ul>
+                    {% for producto in productos_recientes %}
+                        <li>{{ producto }}</li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No hay productos añadidos recientemente.</p>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

@@ -1,0 +1,121 @@
+/* Estilos para categoria_form.html */
+.categoria-form-panel {
+    max-width: 800px;
+    margin: 32px auto;
+    padding: 0 20px;
+}
+
+.form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.form-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4c1d95;
+}
+
+.btn-volver {
+    background: #6d28d9;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+
+.btn-volver:hover {
+    background: #5b21b6;
+}
+
+.form-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 32px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    color: #1e1b4b;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    font-family: inherit;
+}
+
+.form-input:focus {
+    border-color: #5b2bd6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(91, 43, 214, 0.1);
+}
+
+.form-actions {
+    margin-top: 32px;
+    text-align: right;
+}
+
+.btn-guardar {
+    background: #6d28d9;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-guardar:hover {
+    background: #5b21b6;
+}
+
+.alert {
+	padding: 16px 24px;
+	border-radius: 8px;
+	font-weight: 600;
+	position: fixed;
+	top: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 9999;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	min-width: 300px;
+	text-align: center;
+	animation: slideDown 0.4s ease-out;
+}
+
+.alert.error {
+	background: #fee2e2;
+	color: #b91c1c;
+	border: 1px solid #fecaca;
+}
+
+.alert.success {
+	background: #dcfce7;
+	color: #15803d;
+	border: 1px solid #bbf7d0;
+}
+
+@keyframes slideDown {
+	from { top: -100px; opacity: 0; }
+	to { top: 20px; opacity: 1; }
+}

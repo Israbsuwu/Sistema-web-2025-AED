@@ -1,0 +1,118 @@
+{% extends 'vlastef_app/admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Productos | Panel de Administración{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/productos.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="productos-panel">
+        <h1 class="productos-title">Productos</h1>
+        <p class="productos-count">Total de productos: {{ productos.count }}</p>
+        <div class="productos-actions">
+            <form method="get" class="productos-search-form">
+                <input type="text" name="q" placeholder="Buscar producto..." value="{{ query|default:'' }}" class="productos-search-input">
+                <button type="submit" class="productos-search-btn">Buscar</button>
+            </form>
+            <a href="{% url 'admin_producto_crear' %}" class="btn-crear">Nuevo Producto</a>
+        </div>
+        <div class="productos-table-wrapper">
+            <table class="productos-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Imagen</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Costo Unitario</th>
+                        <th>Costo de Venta</th>
+                        <th>Cantidad</th>
+                        <th>Categoría</th>
+                        <th>Proveedor</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for producto in productos %}
+                        <tr id="producto-row-{{ producto.id }}">
+                            <td>{{ producto.id }}</td>
+                            <td>
+                                {% if producto.imagen %}
+                                    <img src="{{ producto.imagen.url }}" alt="{{ producto.nombre }}" class="producto-miniatura">
+                                {% else %}
+                                    <span class="no-imagen">Sin imagen</span>
+                                {% endif %}
+                            </td>
+                            <td><strong>{{ producto.nombre }}</strong></td>
+                            <td>{{ producto.descripcion|default:"-"|truncatechars:50 }}</td>
+                            <td>C$ {{ producto.precio_real }}</td>
+                            <td>C$ {{ producto.precio_venta }}</td>
+                            <td>{{ producto.cantidad_disponible }}</td>
+                            <td>
+                                {% if producto.categoria %}
+                                    <a href="{% url 'admin_categorias' %}?highlight={{ producto.categoria.id }}" class="link-tabla">{{ producto.categoria.nombre }}</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if producto.proveedor %}
+                                    <a href="{% url 'admin_proveedores' %}?highlight={{ producto.proveedor.id }}" class="link-tabla">{{ producto.proveedor.nombre }}</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="action-buttons-grid">
+                                    <a href="{% url 'admin_producto_editar' producto.id %}" class="btn-editar">Editar</a>
+                                    <button type="button" class="btn-eliminar" 
+                                        data-url="{% url 'admin_producto_eliminar' producto.id %}"
+                                        data-nombre="{{ producto.nombre }}"
+                                        onclick="openProductoModal(this.dataset.url, this.dataset.nombre)">Eliminar</button>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="10" class="no-productos">No hay productos registrados.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div id="modal-backdrop-producto" class="modal-backdrop" style="display: none;">
+        <div class="modal-content">
+            <h3>Confirmar Eliminación</h3>
+            <p>¿Estás seguro de que deseas eliminar el producto <strong id="modal-nombre-producto"></strong>?</p>
+            <div class="modal-warning">
+                <p><strong>⚠️ Advertencia:</strong> Esta acción no se puede deshacer.</p>
+                <p>Si hay ventas asociadas a este producto, los registros históricos no se verán afectados.</p>
+                <p>Los movimientos de stock (entradas y salidas) se conservarán desvinculados del producto.</p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancelar" onclick="closeProductoModal()">Cancelar</button>
+                <a href="#" id="modal-confirm-btn-producto" class="btn-confirmar btn-danger">Eliminar</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Visor de Imagen Ampliada -->
+    <div id="image-viewer-backdrop" class="image-viewer-backdrop" style="display:none;">
+        <img id="image-viewer-img" class="image-viewer-img" src="" alt="Imagen producto ampliada">
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'vlastef_app/js/admin_panel/productos.js' %}"></script>
+{% endblock %}

@@ -1,20 +1,15 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Vlastef{% endblock %}</title>
-    {% block extra_css %}{% endblock %}
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Vlastef{% endblock %}</title>
+        {% block extra_css %}{% endblock %}
+    </head>
+    <body>
         {% block body %}{% endblock %}
-        <footer style="position:fixed;right:12px;bottom:12px">
-            {% if request.user.is_authenticated and request.user.is_staff %}
-                <a href="{% url 'admin_dashboard' %}" style="background:#2d7bf4;color:#fff;padding:8px 10px;border-radius:6px;text-decoration:none">Panel Admin</a>
-            {% endif %}
-        </footer>
-    {% block extra_js %}{% endblock %}
-</body>
+        <footer style="position:fixed;right:12px;bottom:12px"></footer>
+        {% block extra_js %}{% endblock %}
+    </body>
 </html>

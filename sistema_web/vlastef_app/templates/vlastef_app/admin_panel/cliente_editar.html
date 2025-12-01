@@ -1,0 +1,104 @@
+{% extends 'vlastef_app/admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Editar Usuario | Panel de Administración{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/cliente_editar.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="cliente-editar-panel">
+        <div class="editar-header">
+            <h1 class="editar-title">Editar Usuario</h1>
+            <a href="{% url 'admin_clientes' %}" class="btn-volver">Cancelar</a>
+        </div>
+
+        <div class="editar-card">
+            <form method="post" class="editar-form">
+                {% csrf_token %}
+                
+                <div class="form-section">
+                    <h3>Información de Usuario</h3>
+                    <div class="form-group">
+                        <label for="username">Usuario (No editable)</label>
+                        <input type="text" id="username" value="{{ cliente.usuario.username }}" disabled class="form-input disabled">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="text" id="email" name="email" value="{{ cliente.usuario.email }}" class="form-input">
+                    </div>
+                    <div class="form-group form-group-inline">
+                        <input type="checkbox" id="is_staff" name="is_staff" {% if cliente.usuario.is_staff %}checked{% endif %} style="width: 18px; height: 18px;">
+                        <label for="is_staff" class="label-clickable">Es Staff (Permisos de administrador)</label>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Seguridad</h3>
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <button type="button" onclick="togglePasswordReset()" class="btn-reset-password">Restablecer Contraseña</button>
+                    </div>
+                    <div id="password-reset-area" class="password-reset-area">
+                        <p style="margin-bottom: 12px; color: #64748b; font-size: 0.9rem;">Ingresa la nueva contraseña para el usuario. Esta acción no se puede deshacer.</p>
+                        <div class="form-group">
+                            <label for="new_password">Nueva Contraseña</label>
+                            <input type="password" id="new_password" name="new_password" class="form-input" placeholder="Escribe la nueva contraseña">
+                        </div>
+                        <button type="button" class="btn-confirm-reset" id="btn-open-reset-modal">Confirmar cambio de contraseña</button>
+                        <!-- Modal emergente para confirmar cambio de contraseña -->
+                        <div id="modal-backdrop-reset" class="modal-backdrop" style="display: none;">
+                            <div class="modal-content">
+                                <h3 id="modal-title-reset">¿Cambiar contraseña?</h3>
+                                <p id="modal-message-reset">¿Estás seguro de que deseas cambiar la contraseña de este usuario? Esta acción no se puede deshacer.</p>
+                                <div class="modal-actions">
+                                    <button type="button" class="btn-cancelar" id="btn-cancel-reset-modal">Cancelar</button>
+                                    <button type="button" class="btn-confirmar btn-danger" id="btn-confirm-reset-modal" data-reset-url="{% url 'admin_cliente_reset_password' cliente.usuario.id %}">Sí, cambiar contraseña</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h3>Información Personal</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombres">Nombres</label>
+                            <input type="text" id="nombres" name="nombres" value="{{ cliente.nombres }}" class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="apellidos">Apellidos</label>
+                            <input type="text" id="apellidos" name="apellidos" value="{{ cliente.apellidos }}" class="form-input">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="text" id="telefono" name="telefono" value="{{ cliente.telefono|default:'' }}" class="form-input">
+                    </div>
+                    <div class="form-group">
+                        <label for="direccion">Dirección</label>
+                        <textarea id="direccion" name="direccion" rows="3" class="form-input">{{ cliente.direccion|default:'' }}</textarea>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-guardar">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'vlastef_app/js/admin_panel/cliente_editar.js' %}"></script>
+{% endblock %}

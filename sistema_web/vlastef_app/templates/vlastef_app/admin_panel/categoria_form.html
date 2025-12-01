@@ -1,0 +1,49 @@
+{% extends 'vlastef_app/admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo }} | Panel de Administración{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/categoria_form.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    <div class="categoria-form-panel">
+        <div class="form-header">
+            <h1 class="form-title">{{ titulo }}</h1>
+            <a href="{% url 'admin_categorias' %}" class="btn-volver">Cancelar</a>
+        </div>
+
+        <div class="form-card">
+            <form method="post" class="categoria-form" novalidate>
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="nombre">Nombre de la Categoría *</label>
+                    <input type="text" id="nombre" name="nombre" class="form-input" 
+                        value="{{ categoria.nombre|default:'' }}" required maxlength="100">
+                </div>
+
+                <div class="form-group">
+                    <label for="descripcion">Descripción</label>
+                    <textarea id="descripcion" name="descripcion" class="form-input" rows="4">{{ categoria.descripcion|default:'' }}</textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-guardar">Guardar Categoría</button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<div id="categoria-form-alerts-source" style="display:none;">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert-item" data-type="{{ message.tags|default:'success' }}">{{ message|escape }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+    <script src="{% static 'vlastef_app/js/admin_panel/categoria_form.js' %}"></script>
+{% endblock %}

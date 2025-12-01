@@ -1,0 +1,88 @@
+{% extends 'vlastef_app/admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Categorías | Panel de Administración{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/categorias.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    <div class="categorias-panel">
+        <h1 class="categorias-title">Categorías de Productos</h1>
+        <p class="categorias-count">Total de categorías: {{ total_categorias }}</p>
+
+        <div class="categorias-actions">
+            <form method="get" class="categorias-search-form">
+                <input type="text" name="q" placeholder="Buscar categoría..." value="{{ query|default:'' }}" class="categorias-search-input">
+                <button type="submit" class="categorias-search-btn">Buscar</button>
+            </form>
+            <a href="{% url 'admin_categoria_crear' %}" class="btn-crear">Nueva Categoría</a>
+        </div>
+
+        <div class="categorias-table-wrapper">
+            <table class="categorias-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Productos Asociados</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for categoria in categorias %}
+                        <tr id="categoria-row-{{ categoria.id }}">
+                            <td>{{ categoria.id }}</td>
+                            <td><strong>{{ categoria.nombre }}</strong></td>
+                            <td>{{ categoria.descripcion|default:"-"|truncatechars:50 }}</td>
+                            <td>{{ categoria.productos.count }}</td>
+                            <td>
+                                <div class="action-buttons-grid">
+                                    <div class="btn-detalle-wrapper">
+                                        <a href="{% url 'admin_categoria_detalle' categoria.id %}" class="btn-detalle">Ver</a>
+                                    </div>
+                                    <a href="{% url 'admin_categoria_editar' categoria.id %}" class="btn-editar">Editar</a>
+                                    <button type="button" class="btn-eliminar" 
+                                        data-url="{% url 'admin_categoria_eliminar' categoria.id %}"
+                                        data-nombre="{{ categoria.nombre }}"
+                                        onclick="openModal(this.dataset.url, this.dataset.nombre)">Eliminar</button>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="5" class="no-categorias">No hay categorías registradas.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div id="modal-backdrop" class="modal-backdrop" style="display: none;">
+        <div class="modal-content">
+            <h3>Confirmar Eliminación</h3>
+            <p>¿Estás seguro de que deseas eliminar la categoría <strong id="modal-nombre-categoria"></strong>?</p>
+            <div class="modal-warning">
+                <p><strong>⚠️ Advertencia:</strong> Esta acción no se puede deshacer.</p>
+                <p>Si hay productos asociados a esta categoría, quedarán sin categoría asignada.</p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancelar" onclick="closeModal()">Cancelar</button>
+                <a href="#" id="modal-confirm-btn" class="btn-confirmar btn-danger">Eliminar</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<div id="categorias-alerts-source" style="display:none;">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert-item" data-type="{{ message.tags|default:'success' }}">{{ message|escape }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+    <script src="{% static 'vlastef_app/js/admin_panel/categorias.js' %}"></script>
+{% endblock %}

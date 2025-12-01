@@ -1,0 +1,87 @@
+{% extends 'vlastef_app/admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Detalle Venta #{{ venta.numero_factura }} | Panel de Administración{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/ventas.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    <div class="venta-detalle-panel">
+        <div class="detalle-header">
+            <h1 class="detalle-title">Venta #{{ venta.numero_factura }}</h1>
+            <a href="{% url 'admin_ventas' %}" class="btn-volver">Volver a Ventas</a>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>Información de la Venta</h3>
+                <p><strong>Fecha:</strong> {{ venta.fecha|date:'d/m/Y H:i' }}</p>
+                <p><strong>Estado:</strong> <span class="estado-badge estado-{{ venta.estado }}">{{ venta.get_estado_display }}</span></p>
+                
+                <form method="post" class="estado-form">
+                    {% csrf_token %}
+                    <label for="estado" class="estado-label">Cambiar Estado:</label>
+                    <select name="estado" id="estado" class="estado-select">
+                        {% for codigo, nombre in venta.ESTADO_CHOICES %}
+                            <option value="{{ codigo }}" {% if venta.estado == codigo %}selected{% endif %}>{{ nombre }}</option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn-actualizar">Actualizar</button>
+                </form>
+
+                <p><strong>Método de Pago:</strong> {{ venta.get_metodo_pago_display }}</p>
+                <p><strong>Total:</strong> C${{ venta.total }}</p>
+            </div>
+            <div class="info-card">
+                <h3>Información del Cliente</h3>
+                <p><strong>Usuario:</strong> {{ venta.cliente.usuario.username }}</p>
+                <p><strong>Nombre:</strong> {{ venta.cliente.nombres }} {{ venta.cliente.apellidos }}</p>
+                <p><strong>Email:</strong> {{ venta.cliente.usuario.email }}</p>
+                <p><strong>Teléfono:</strong> {{ venta.cliente.telefono }}</p>
+            </div>
+        </div>
+
+        <div class="detalle-items-wrapper">
+            <h3>Productos</h3>
+            <table class="detalle-table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Precio Unitario</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for detalle in detalles %}
+                    <tr>
+                        <td>{{ detalle.producto.nombre }}</td>
+                        <td>C${{ detalle.precio_unitario }}</td>
+                        <td>{{ detalle.cantidad }}</td>
+                        <td>C${{ detalle.subtotal }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="text-right"><strong>Total</strong></td>
+                        <td><strong>C${{ total_calculado }}</strong></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<div id="venta-detalle-alerts-source" style="display:none;">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert-item" data-type="{{ message.tags|default:'success' }}">{{ message|escape }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+<script src="{% static 'vlastef_app/js/admin_panel/venta_detalle.js' %}"></script>
+{% endblock %}

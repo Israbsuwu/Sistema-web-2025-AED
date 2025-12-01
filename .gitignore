@@ -16,8 +16,6 @@ db.sqlite3
 *.log
 .env
 .env.*
-productos
-!media/.gitkeep
 *.bak
 
 # ───────── Virtual Environment ─────────
@@ -28,6 +26,10 @@ ENV/
 # ───────── Django Migrations ─────────
 */migrations/
 !*/migrations/__init__.py
+
+# ───────── Media Files ─────────
+media/
+!media/.gitkeep
 
 # ───────── IDEs / Editors ─────────
 .vscode/

@@ -1,0 +1,57 @@
+{% extends 'vlastef_app/admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Carritos | Panel de Administración{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/carritos.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    <div class="carritos-panel">
+        <h1 class="carritos-title">Carritos de Compra</h1>
+        <p class="carritos-count">Total de carritos: {{ total_carritos }}</p>
+        <div class="carritos-actions">
+            <form method="get" class="carritos-search-form">
+                <input type="text" name="q" placeholder="Buscar por cliente..." value="{{ query|default:'' }}" class="carritos-search-input">
+                <button type="submit" class="carritos-search-btn">Buscar</button>
+            </form>
+        </div>
+        <div class="carritos-table-wrapper">
+            <table class="carritos-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Fecha Creación</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for carrito in carritos %}
+                    <tr>
+                        <td>{{ carrito.id }}</td>
+                        <td><strong>{{ carrito.cliente.usuario.username }}</strong></td>
+                        <td>{{ carrito.fecha_creacion|date:'d/m/Y H:i' }}</td>
+                        <td>
+                            {% if carrito.activo %}
+                                <span class="estado-activo">Activo</span>
+                            {% else %}
+                                <span class="estado-inactivo">Cerrado</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="action-buttons-grid">
+                                <a href="{% url 'admin_carrito_detalle' carrito.id %}" class="btn-detalle">Ver Items</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                        <tr><td colspan="5" class="no-carritos">No hay carritos registrados.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

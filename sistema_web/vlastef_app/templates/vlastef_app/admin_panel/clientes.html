@@ -1,0 +1,114 @@
+{% extends 'vlastef_app/admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Usuarios | Panel de Administración{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/clientes.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    <div class="clientes-panel">
+        <h1 class="clientes-title">Usuarios registrados</h1>
+        <p class="clientes-count">Cantidad de usuarios: {{ total_clientes }}</p>
+
+        <div class="clientes-actions">
+            <form method="get" class="clientes-search-form">
+                <input type="text" name="q" placeholder="Buscar usuario..." value="{{ query|default:'' }}" class="clientes-search-input">
+                <button type="submit" class="clientes-search-btn">Buscar</button>
+            </form>
+        </div>
+        <div class="clientes-table-wrapper">
+            <table class="clientes-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Nombre completo</th>
+                        <th>Email</th>
+                        <th>Teléfono</th>
+                        <th>Dirección</th>
+                        <th>Fecha de registro</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cliente in clientes %}
+                        <tr>
+                            <td>{{ cliente.usuario.id }}</td>
+                            <td><strong>{{ cliente.usuario.username }}</strong></td>
+                            <td>{{ cliente.nombres }} {{ cliente.apellidos }}</td>
+                            <td>{{ cliente.usuario.email }}</td>
+                            <td>{{ cliente.telefono }}</td>
+                            <td>{{ cliente.direccion }}</td>
+                            <td>{{ cliente.fecha_registro|date:'d/m/Y' }}</td>
+                            <td>
+                                {% if cliente.usuario.is_active %}
+                                    <span class="estado-activo">Activo</span>
+                                {% else %}
+                                    <span class="estado-inactivo">Inactivo</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="action-buttons-grid">
+                                    <a href="{% url 'admin_cliente_detalle' cliente.usuario.id %}" class="btn-detalle">Ver</a>
+                                    <a href="{% url 'admin_cliente_editar' cliente.usuario.id %}" class="btn-editar">Editar</a>
+                                    {% if cliente.usuario.is_active %}
+                                        <button type="button" class="btn-desactivar" 
+                                            data-url="{% url 'admin_cliente_desactivar' cliente.usuario.id %}"
+                                            data-username="{{ cliente.usuario.username }}"
+                                            onclick="openModal('desactivar', this.dataset.url, this.dataset.username)">Desactivar</button>
+                                    {% else %}
+                                        <button type="button" class="btn-activar" 
+                                            data-url="{% url 'admin_cliente_activar' cliente.usuario.id %}"
+                                            data-username="{{ cliente.usuario.username }}"
+                                            onclick="openModal('activar', this.dataset.url, this.dataset.username)">Activar</button>
+                                    {% endif %}
+                                        <button type="button" class="btn-eliminar" 
+                                            data-url="{% url 'admin_cliente_eliminar' cliente.usuario.id %}"
+                                            data-username="{{ cliente.usuario.username }}"
+                                            onclick="openModal('eliminar', this.dataset.url, this.dataset.username)">Eliminar</button>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="9" class="no-clientes">No hay usuarios registrados.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Ventanas emergentes (modales) -->
+    <div id="modal-backdrop" class="modal-backdrop" style="display: none;">
+        <div class="modal-content">
+            <h3 id="modal-title">Confirmación</h3>
+            <p id="modal-message">¿Estás seguro?</p>
+            <div id="modal-warning" class="modal-warning" style="display: none;">
+                <p><strong>⚠️ Advertencia:</strong> Eliminar un usuario es una acción destructiva e irreversible.</p>
+                <p>Solo se recomienda si:</p>
+                <ul>
+                    <li>Es una cuenta de prueba o error.</li>
+                    <li>El usuario no tiene historial de ventas, comentarios o actividad importante.</li>
+                </ul>
+                <p>Si el usuario tiene historial, se recomienda <strong>Desactivar</strong> la cuenta en su lugar para preservar los registros.</p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancelar" onclick="closeModal()">Cancelar</button>
+                <a href="#" id="modal-confirm-btn" class="btn-confirmar">Confirmar</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<div id="clientes-alerts-source" style="display:none;">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert-item" data-type="{{ message.tags|default:'success' }}">{{ message|escape }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+    <script src="{% static 'vlastef_app/js/admin_panel/clientes.js' %}"></script>
+{% endblock %}

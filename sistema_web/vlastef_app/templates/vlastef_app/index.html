@@ -8,45 +8,44 @@
 {% endblock %}
 
 {% block body %}
-    <div class="card">
+  <div class="card">
     <section class="hero">
-      <div>
-        <div class="brand">
-          <div class="logo"></div>
-          <div style="font-weight:600">YOUR LOGO</div>
+      <div class="hero-content">
+        <h2 class="bienvenida">¡Bienvenid@ a</h2>
+        <h1 class="marca">Moda VLASTEF!</h1>
+        <p class="subtexto">Todo lo que deseas en un solo lugar.</p>
+        <div class="logo-grande">
+          <img src="{% static 'vlastef_app/images/logo.png' %}" alt="Logo" />
         </div>
-        <h1>Hola, Bienvenidos a Moda Vlastef!</h1>
-        <p>Todo lo que deseas en un solo lugar.</p>
       </div>
     </section>
 
     <section class="panel">
-      {# Use a Django form POST so authentication happens on the server #}
       <form method="post" id="loginForm" novalidate>
         {% csrf_token %}
-        <label class="muted">Email address</label>
-        <input id="email" name="email" class="input" type="email" placeholder="name@mail.com" value="{{ request.POST.email|default_if_none:'' }}" />
+        <label class="muted">Usuario</label>
+        <input id="username" name="username" class="input" type="text" placeholder="Usuario" value="{{ request.POST.username|default_if_none:'' }}" />
 
-        <label class="muted">Password</label>
-        <!-- campo de contraseña con ojito -->
+        <label class="muted">Contraseña</label>
         <div class="field-with-icon">
           <input id="password" name="password" class="input" type="password" placeholder="••••••••" />
-          <button type="button" class="toggle-pass" aria-label="Mostrar contraseña" title="Mostrar contraseña">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
+          <button type="button" class="toggle-pass" aria-label="Mostrar contraseña" title="Mostrar contraseña" onclick="var p=document.getElementById('password');var s=this.querySelector('.slash');if(p.type==='password'){p.type='text';s.style.display='block';}else{p.type='password';s.style.display='none';}this.classList.toggle('show');">
+            <span style="position:relative;display:inline-block;width:20px;height:20px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position:absolute;top:0;left:0;">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg class="slash" width="20" height="20" viewBox="0 0 24 24" style="position:absolute;top:0;left:0;display:none;pointer-events:none;" fill="none" stroke="#000000" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="20" x2="20" y2="4"/></svg>
+            </span>
           </button>
         </div>
 
-        {# Server-side error message (from views.py) #}
         {% if error %}
           <div id="loginErrors" style="color:#b00020;font-size:13px;margin-top:8px;display:block">{{ error }}</div>
         {% else %}
           <div id="loginErrors" style="color:#b00020;font-size:13px;margin-top:8px;display:none"></div>
         {% endif %}
 
-        {# Django messages (e.g., registro exitoso) #}
         {% if messages %}
           {% for message in messages %}
             <div style="margin-top:8px;color:green">{{ message }}</div>
@@ -54,22 +53,15 @@
         {% endif %}
 
         <div class="row" style="justify-content:space-between;margin-top:6px;margin-bottom:14px">
-          <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" name="remember"/> Remember me</label>
-          <a class="muted" href="#">Forgot password?</a>
+          <label style="display:flex;align-items:center;gap:8px"><input type="checkbox" name="remember"/>Recuérdame</label>
+          <a class="muted" href="#">¿Olvidaste tu contraseña?</a>
         </div>
 
         <div class="actions">
-          <button id="btnLogin" class="btn" type="submit">Login</button>
-          {# Use Django URL for register view #}
-          <a class="btn secondary" href="{% url 'register' %}">Sign up</a>
+          <button id="btnLogin" class="btn" type="submit">Ingresar</button>
+          <a class="btn secondary" href="{% url 'register' %}">Registrarse</a>
         </div>
       </form>
-
-      <div class="social">FOLLOW • <span>fb</span> <span>tw</span> <span>ig</span></div>
     </section>
   </div>
-{% endblock %}
-
-{% block extra_js %}
-    <script src="{% static 'vlastef_app/js/login.js' %}"></script>
 {% endblock %}

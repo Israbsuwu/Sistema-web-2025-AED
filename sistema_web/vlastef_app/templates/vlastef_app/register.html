@@ -1,7 +1,7 @@
 {% extends "vlastef_app/layout.html" %}
 {% load static %}
 
-{% block title %}Registro{% endblock %}
+{% block title %}Registrar cuenta{% endblock %}
 
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'vlastef_app/css/register.css' %}">
@@ -9,85 +9,83 @@
 
 {% block body %}
     <div class="container">
-        <h1>Sign in / Crear cuenta</h1>
-        <p class="small">Ingrese sus datos. Los campos marcados con * son obligatorios.</p>
-
+        <h1 class="titulo-registro">Registrar cuenta</h1>
+        <p class="subtexto-registro">¡Crea tu cuenta y comienza a disfrutar de la experiencia VLASTEF!</p>
         <form id="registerForm" method="post" novalidate>
             {% csrf_token %}
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="{% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
-
             <div class="field">
-                <label for="id_username">Usuario *</label>
-                {{ form.username.errors }}
-                {{ form.username }}
+                <label for="id_username">Usuario:</label>
+                <input id="id_username" name="username" type="text" class="input{% if form.username.errors %} input-error{% endif %}" placeholder="quevedin" value="{{ form.data.username|default_if_none:'' }}" />
+                {% for err in form.username.errors %}<div class="error-text">{{ err }}</div>{% endfor %}
             </div>
-
             <div class="field">
-                <label for="id_correo">Correo *</label>
-                {{ form.correo.errors }}
-                {{ form.correo }}
+                <label for="id_correo">Correo:</label>
+                <input id="id_correo" name="correo" type="email" class="input{% if form.correo.errors %} input-error{% endif %}" placeholder="ejemplo@dominio.com" value="{{ form.data.correo|default_if_none:'' }}" />
+                {% for err in form.correo.errors %}<div class="error-text">{{ err }}</div>{% endfor %}
             </div>
-
             <div class="field">
-                <label for="id_contrasena">Contraseña *</label>
-                {{ form.contrasena.errors }}
-                {{ form.contrasena }}
-                <label class="show-label">
-                    <input type="checkbox" id="togglePwd"> Mostrar contraseña
-                </label>
+                <label for="id_contrasena">Contraseña:</label>
+                <div class="field-with-icon">
+                    <input id="id_contrasena" name="contrasena" type="password" class="input{% if form.contrasena.errors %} input-error{% endif %}" placeholder="••••••••" />
+                    <button type="button" class="toggle-pass" aria-label="Mostrar contraseña" title="Mostrar contraseña" onclick="var p=document.getElementById('id_contrasena');var s=this.querySelector('.slash');if(p.type==='password'){p.type='text';s.style.display='block';}else{p.type='password';s.style.display='none';}this.classList.toggle('show');">
+                        <span style="position:relative;display:inline-block;width:20px;height:20px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position:absolute;top:0;left:0;">
+                                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                            <svg class="slash" width="20" height="20" viewBox="0 0 24 24" style="position:absolute;top:0;left:0;display:none;pointer-events:none;" fill="none" stroke="#000000" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="20" x2="20" y2="4"/></svg>
+                        </span>
+                    </button>
+                </div>
+                {% for err in form.contrasena.errors %}<div class="error-text">{{ err }}</div>{% endfor %}
             </div>
-
             <div class="field">
-                <label for="id_contrasena2">Confirmar contraseña *</label>
-                {{ form.contrasena2.errors }}
-                {{ form.contrasena2 }}
+                <label for="id_contrasena2">Confirmar contraseña:</label>
+                <input id="id_contrasena2" name="contrasena2" type="password" class="input{% if form.contrasena2.errors %} input-error{% endif %}" placeholder="••••••••" />
+                {% for err in form.contrasena2.errors %}<div class="error-text">{{ err }}</div>{% endfor %}
             </div>
-
             <div class="row">
                 <div class="field">
-                    <label for="id_nombres">Nombres *</label>
-                    {{ form.nombres.errors }}
-                    {{ form.nombres }}
+                    <label for="id_nombres">Nombres:</label>
+                    <input id="id_nombres" name="nombres" type="text" class="input{% if form.nombres.errors %} input-error{% endif %}" placeholder="Jhonny Antony" value="{{ form.data.nombres|default_if_none:'' }}" />
+                    {% for err in form.nombres.errors %}<div class="error-text">{{ err }}</div>{% endfor %}
                 </div>
                 <div class="field">
-                    <label for="id_apellidos">Apellidos *</label>
-                    {{ form.apellidos.errors }}
-                    {{ form.apellidos }}
+                    <label for="id_apellidos">Apellidos:</label>
+                    <input id="id_apellidos" name="apellidos" type="text" class="input{% if form.apellidos.errors %} input-error{% endif %}" placeholder="Garay Cisnero" value="{{ form.data.apellidos|default_if_none:'' }}" />
+                    {% for err in form.apellidos.errors %}<div class="error-text">{{ err }}</div>{% endfor %}
                 </div>
             </div>
-
             <div class="row">
                 <div class="field">
-                    <label for="id_fecha_nac">Fecha de nacimiento</label>
-                    {{ form.fecha_nac.errors }}
-                    {{ form.fecha_nac }}
+                    <label for="id_fecha_nac">Fecha de nacimiento:</label>
+                    <input id="id_fecha_nac" name="fecha_nac" type="date" class="input{% if form.fecha_nac.errors %} input-error{% endif %}" value="{{ form.data.fecha_nac|default_if_none:'' }}" />
+                    {% for err in form.fecha_nac.errors %}<div class="error-text">{{ err }}</div>{% endfor %}
                 </div>
                 <div class="field">
-                    <label for="id_sexo">Sexo</label>
-                    {{ form.sexo.errors }}
-                    {{ form.sexo }}
+                    <label for="id_sexo">Sexo:</label>
+                    <select id="id_sexo" name="sexo" class="input{% if form.sexo.errors %} input-error{% endif %}">
+                        <option value="">Seleccione su sexo...</option>
+                        <option value="F" {% if form.data.sexo == 'F' %}selected{% endif %}>Femenino</option>
+                        <option value="M" {% if form.data.sexo == 'M' %}selected{% endif %}>Masculino</option>
+                    </select>
+                    {% for err in form.sexo.errors %}<div class="error-text">{{ err }}</div>{% endfor %}
                 </div>
             </div>
-
             <div class="field">
-                <label for="id_direccion">Dirección</label>
-                {{ form.direccion.errors }}
-                {{ form.direccion }}
+                <label for="id_telefono">Teléfono:</label>
+                <input id="id_telefono" name="telefono" type="text" class="input{% if form.telefono.errors %} input-error{% endif %}" placeholder="88775522" value="{{ form.data.telefono|default_if_none:'' }}" />
+                {% for err in form.telefono.errors %}<div class="error-text">{{ err }}</div>{% endfor %}
             </div>
-
+            <div class="field">
+                <label for="id_direccion">Dirección:</label>
+                <textarea id="id_direccion" name="direccion" class="input{% if form.direccion.errors %} input-error{% endif %}" rows="3" placeholder="Calle, número, ciudad...">{{ form.data.direccion|default_if_none:'' }}</textarea>
+                {% for err in form.direccion.errors %}<div class="error-text">{{ err }}</div>{% endfor %}
+            </div>
             <div class="actions">
                 <button type="submit" class="btn-primary">Enviar</button>
-                <!-- volver al login (index) para iniciar sesión tras registro) -->
                 <a class="btn secondary" href="{% url 'index' %}">Volver</a>
             </div>
         </form>
     </div>
-{% endblock %}
-
-{% block extra_js %}
-    <script src="{% static 'vlastef_app/js/register.js' %}"></script>
 {% endblock %}

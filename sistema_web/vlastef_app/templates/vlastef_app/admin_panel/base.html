@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Panel de Administración{% endblock %}</title>
+        <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/base.css' %}">
+        {% block extra_css %}{% endblock %}
+    </head>
+    <body>
+        <div class="admin-layout">
+            <aside class="sidebar">
+                <div class="logo-panel">
+                    <img src="{% static 'vlastef_app/images/logo.png' %}" alt="Logo" class="logo" />
+                    <span class="brand">Moda VLASTEF</span>
+                </div>
+
+                <nav class="menu">
+                    <a href="{% url 'admin_dashboard' %}" class="menu-item{% if 'panel/dashboard' in request.path %} active{% endif %}"><span class="icon">🏠</span><span class="label">Dashboard</span></a>
+                    <a href="{% url 'admin_clientes' %}" class="menu-item{% if 'panel/clientes' in request.path %} active{% endif %}"><span class="icon">👥</span><span class="label">Usuarios</span></a>
+                    <a href="{% url 'admin_categorias' %}" class="menu-item{% if 'panel/categorias' in request.path %} active{% endif %}"><span class="icon">📂</span><span class="label">Categorías</span></a>
+                    <a href="{% url 'admin_productos' %}" class="menu-item{% if 'panel/productos' in request.path %} active{% endif %}"><span class="icon">📦</span><span class="label">Productos</span></a>
+                    <a href="{% url 'admin_ventas' %}" class="menu-item{% if 'panel/ventas' in request.path %} active{% endif %}"><span class="icon">💸</span><span class="label">Ventas</span></a>
+                    <a href="{% url 'admin_carritos' %}" class="menu-item{% if 'panel/carritos' in request.path %} active{% endif %}"><span class="icon">🛒</span><span class="label">Carrito</span></a>
+                    <a href="{% url 'admin_proveedores' %}" class="menu-item{% if 'panel/proveedores' in request.path %} active{% endif %}"><span class="icon">🚚</span><span class="label">Proveedores</span></a>
+                    <a href="{% url 'admin_comentarios' %}" class="menu-item{% if 'panel/comentarios' in request.path %} active{% endif %}"><span class="icon">💬</span><span class="label">Comentarios</span></a>
+                    <a href="{% url 'admin_stock' %}" class="menu-item{% if 'panel/stock' in request.path %} active{% endif %}"><span class="icon">📊</span><span class="label">Stock</span></a>
+                </nav>
+
+                <nav class="menu" style="margin-top:auto;">
+                    <a href="#" class="menu-item"><span class="icon">⚙️</span><span class="label">Configuraciones</span></a>
+                    <a href="{% url 'logout' %}" class="menu-item"><span class="icon">🚪</span><span class="label">Cerrar sesión</span></a>
+                </nav>
+            </aside>
+            
+            <main class="main-panel">
+                {% block main_content %}{% endblock %}
+            </main>
+        </div>
+
+        <script src="{% static 'vlastef_app/js/admin_panel/admin_panel.js' %}"></script>
+        {% block extra_js %}{% endblock %}
+    </body>
+</html>

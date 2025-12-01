@@ -1,0 +1,154 @@
+{% extends 'vlastef_app/admin_panel/base.html' %}
+{% load static %}
+{% load extra_images %}
+
+{% block title %}{{ titulo }} | Productos{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/producto_form.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    <div class="producto-form-panel">
+        <div class="form-header">
+            <h1 class="producto-form-title">{{ titulo }}</h1>
+        </div>
+
+        <div class="form-card">
+            <form method="post" enctype="multipart/form-data" class="producto-form" id="producto-form" novalidate>
+                {% csrf_token %}
+
+                <div id="alert-container">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert {{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div class="alert error">Error en {{ field.label }}: {{ error }}</div>
+                            {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                            <div class="alert error">{{ error }}</div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_nombre">Nombre *</label>
+                        {{ form.nombre }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_categoria">Categoría *</label>
+                        {{ form.categoria }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_proveedor">Proveedor *</label>
+                        {{ form.proveedor }}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_precio_real">Costo Unitario *</label>
+                        <div class="input-group">
+                            <span class="currency-symbol">C$</span>
+                            {{ form.precio_real }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_precio_venta">Costo de Venta *</label>
+                        <div class="input-group">
+                            <span class="currency-symbol">C$</span>
+                            {{ form.precio_venta }}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_cantidad_disponible">Cantidad Disponible</label>
+                        {{ form.cantidad_disponible }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_descripcion">Descripción</label>
+                    {{ form.descripcion }}
+                </div>
+
+                <div class="form-group">
+                    <label for="id_imagen">Imagen</label>
+                    {{ form.imagen }}
+                    <div class="preview-row">
+                        {% if producto and producto.imagen %}
+                            <div class="principal-wrapper">
+                                <img src="{{ producto.imagen.url }}" alt="Imagen actual" class="imagen-preview" id="imagen-actual">
+                                <button type="button" class="btn-delete-principal" title="Eliminar imagen principal" data-delete-principal>×</button>
+                            </div>
+                        {% endif %}
+                        <img src="" alt="Vista previa" class="imagen-preview" id="imagen-preview" style="display:none;">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="id_extra_imagenes">Imágenes adicionales (opcional)</label>
+                    <input type="file" name="extra_imagenes" id="id_extra_imagenes" class="form-input" multiple accept="image/*">
+                    {% if producto %}
+                        <div class="extra-images-grid">
+                            {% with prod_id=producto.id %}
+                                {% for fname in prod_id|extra_images %}
+                                    <div class="extra-image-item">
+                                        <div class="thumb-wrapper">
+                                            <img src="{{ fname.url }}" alt="Extra" class="extra-thumb" data-fname="{{ fname.name }}">
+                                            {% if producto.imagen.name != fname.name %}
+                                                <button type="button" class="btn-delete-extra" title="Eliminar" data-delete-file="{{ fname.name }}">×</button>
+                                            {% endif %}
+                                        </div>
+                                        {% if producto.imagen.name != fname.name %}
+                                            <button type="button" class="btn-set-principal" data-file="{{ fname.name }}">Marcar como principal</button>
+                                        {% else %}
+                                            <span class="principal-badge">Principal</span>
+                                        {% endif %}
+                                    </div>
+                                {% empty %}
+                                    <p class="no-extra">No hay imágenes adicionales.</p>
+                                {% endfor %}
+                            {% endwith %}
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-guardar">Guardar</button>
+                    <a href="{% url 'admin_productos' %}" class="btn-cancelar">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Modal eliminación imagen -->
+    <div id="modal-backdrop-imagen" class="modal-backdrop" style="display:none;">
+        <div class="modal-content">
+            <h3 id="modal-img-title">Confirmar Eliminación</h3>
+            <p id="modal-img-text">¿Eliminar esta imagen?</p>
+            <div class="modal-warning">
+                <p><strong>⚠️ Advertencia:</strong> Esta acción no se puede deshacer.</p>
+                <p id="modal-img-extra-text">La imagen se eliminará del almacenamiento.</p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancelar" id="modal-img-cancel">Cancelar</button>
+                <button type="button" class="btn-confirmar btn-danger" id="modal-img-confirm">Eliminar</button>
+            </div>
+        </div>
+    </div>
+    <!-- Visor de imagen ampliada -->
+    <div id="image-viewer-backdrop" class="image-viewer-backdrop" style="display:none;">
+        <img id="image-viewer-img" class="image-viewer-img" src="" alt="Imagen ampliada">
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'vlastef_app/js/admin_panel/producto_form.js' %}"></script>
+    <script src="{% static 'vlastef_app/js/admin_panel/producto_extra_imgs.js' %}"></script>
+{% endblock %}

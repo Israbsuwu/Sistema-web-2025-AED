@@ -1,0 +1,94 @@
+{% extends 'vlastef_app/admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Comentarios | Panel de Administración{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/comentarios.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    <div class="comentarios-panel">
+        <h1 class="comentarios-title">Comentarios</h1>
+        <p class="comentarios-count">Total de comentarios: {{ total_comentarios }}</p>
+        <div class="comentarios-actions">
+            <form method="get" class="comentarios-search-form">
+                <input type="text" name="q" placeholder="Buscar comentario..." value="{{ query|default:'' }}" class="comentarios-search-input">
+                <button type="submit" class="comentarios-search-btn">Buscar</button>
+            </form>
+        </div>
+        <div class="comentarios-table-wrapper">
+            <table class="comentarios-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Cliente</th>
+                        <th>Producto</th>
+                        <th>Calificación</th>
+                        <th>Texto</th>
+                        <th>Fecha</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for comentario in comentarios %}
+                    <tr>
+                        <td>{{ comentario.id }}</td>
+                        <td><strong>{{ comentario.cliente.usuario.username }}</strong></td>
+                        <td><span class="producto-nombre">{{ comentario.producto.nombre }}</span></td>
+                        <td>
+                            <span class="stars-display">
+                                {% with cal=comentario.calificacion %}
+                                    {% for i in '12345' %}
+                                        <span class="star-display {% if forloop.counter <= cal %}filled{% endif %}">★</span>
+                                    {% endfor %}
+                                {% endwith %}
+                            </span>
+                        </td>
+                        <td>{{ comentario.texto|truncatechars:60 }}</td>
+                        <td>{{ comentario.fecha|date:'d/m/Y H:i' }}</td>
+                        <td>
+                            <div class="action-buttons-grid">
+                                <a href="#" class="btn-ver" title="Ver producto en catálogo (próximamente)">Ver</a>
+                                <button type="button" class="btn-eliminar"
+                                    data-url="{% url 'admin_comentario_eliminar' comentario.id %}"
+                                    data-cliente="{{ comentario.cliente.usuario.username }}"
+                                    data-producto="{{ comentario.producto.nombre }}"
+                                    onclick="openComentarioModal(this.dataset.url, this.dataset.cliente, this.dataset.producto)">Eliminar</button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                        <tr><td colspan="7" class="no-comentarios">No hay comentarios registrados.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div id="modal-backdrop-com" class="modal-backdrop" style="display:none;">
+        <div class="modal-content">
+            <h3>Confirmar Eliminación</h3>
+            <p>¿Eliminar el comentario de <strong id="modal-cliente-com"></strong> sobre <strong id="modal-producto-com"></strong>?</p>
+            <div class="modal-warning">
+                <p><strong>⚠️ Advertencia:</strong> Esta acción no se puede deshacer.</p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancelar" onclick="closeComentarioModal()">Cancelar</button>
+                <a href="#" id="modal-confirm-btn-com" class="btn-confirmar btn-danger">Eliminar</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<div id="comentarios-alerts-source" style="display:none;">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert-item" data-type="{{ message.tags|default:'success' }}">{{ message|escape }}</div>
+        {% endfor %}
+    {% endif %}
+</div>
+    <script src="{% static 'vlastef_app/js/admin_panel/comentarios.js' %}"></script>
+{% endblock %}

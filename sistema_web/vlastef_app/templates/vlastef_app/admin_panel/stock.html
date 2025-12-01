@@ -1,0 +1,114 @@
+{% extends 'vlastef_app/admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Gestión de Stock | Panel de Administración{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/stock.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    <div class="stock-panel">
+        <div class="stock-header">
+            <div>
+                <h1 class="stock-title">Gestión de Stock</h1>
+                <p class="stock-subtitle">Historial de movimientos y control de inventario</p>
+            </div>
+            <a href="{% url 'admin_stock_crear' %}" class="btn-crear">
+                <span class="icon">+</span> Registrar Movimiento
+            </a>
+        </div>
+
+        <div class="stock-grid">
+            <!-- Resumen de Stock Actual -->
+            <div class="stock-summary-card">
+                <h3>Stock Actual por Producto</h3>
+                <div class="stock-list-wrapper">
+                    <table class="stock-summary-table">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Disponible</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for prod in productos_stock %}
+                            <tr id="producto-row-{{ prod.id }}">
+                                <td><a href="{% url 'admin_productos' %}?highlight={{ prod.id }}" class="link-tabla">{{ prod.nombre }}</a></td>
+                                <td>
+                                    <span class="badge-stock {% if prod.cantidad_disponible == 0 %}stock-agotado{% elif prod.cantidad_disponible < 10 %}stock-bajo{% else %}stock-ok{% endif %}">
+                                        {{ prod.cantidad_disponible }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                                <tr><td colspan="2" class="text-center">No hay productos registrados.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Historial de Movimientos -->
+            <div class="stock-history-card">
+                <div class="history-header">
+                    <h3>Historial de Movimientos</h3>
+                    <form method="get" class="stock-search-form">
+                        <input type="text" name="q" placeholder="Buscar producto..." value="{{ query|default:'' }}" class="stock-search-input">
+                        <button type="submit" class="stock-search-btn">Buscar</button>
+                    </form>
+                </div>
+                
+                <div class="stock-table-wrapper">
+                    <table class="stock-table">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Producto</th>
+                                <th>Tipo</th>
+                                <th>Cantidad</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for mov in movimientos %}
+                            <tr>
+                                <td>{{ mov.fecha|date:'d/m/Y H:i' }}</td>
+                                <td>
+                                    {% if mov.producto %}
+                                        <a href="{% url 'admin_productos' %}?highlight={{ mov.producto.id }}" class="history-product-link">{{ mov.producto.nombre }}</a>
+                                    {% else %}
+                                        <span style="color: #94a3b8; font-style: italic;">Producto eliminado</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if mov.tipo == 'E' %}
+                                        <span class="tipo-entrada">Entrada</span>
+                                    {% else %}
+                                        <span class="tipo-salida">Salida</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ mov.cantidad }}</td>
+                                <td class="text-muted">{{ mov.descripcion|default:'-' }}</td>
+                            </tr>
+                            {% empty %}
+                                <tr><td colspan="5" class="no-movimientos">No hay movimientos registrados.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <div id="stock-alerts-source" style="display:none;">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert-item" data-type="{{ message.tags|default:'success' }}">{{ message|escape }}</div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <script src="{% static 'vlastef_app/js/admin_panel/stock_form.js' %}"></script>
+{% endblock %}

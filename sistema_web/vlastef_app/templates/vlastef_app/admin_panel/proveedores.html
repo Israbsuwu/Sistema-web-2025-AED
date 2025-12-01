@@ -1,0 +1,89 @@
+{% extends 'vlastef_app/admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Proveedores | Panel de Administración{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/proveedores.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="proveedores-panel">
+        <h1 class="proveedores-title">Proveedores</h1>
+        <p class="proveedores-count">Total de proveedores: {{ total_proveedores }}</p>
+        <div class="proveedores-actions">
+            <form method="get" class="proveedores-search-form">
+                <input type="text" name="q" placeholder="Buscar proveedor..." value="{{ query|default:'' }}" class="proveedores-search-input">
+                <button type="submit" class="proveedores-search-btn">Buscar</button>
+            </form>
+            <a href="{% url 'admin_proveedor_crear' %}" class="btn-crear">Nuevo Proveedor</a>
+        </div>
+        <div class="proveedores-table-wrapper">
+            <table class="proveedores-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                        <th>Correo</th>
+                        <th>Dirección</th>
+                        <th>Productos Asociados</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for proveedor in proveedores %}
+                        <tr id="proveedor-row-{{ proveedor.id }}">
+                            <td>{{ proveedor.id }}</td>
+                            <td><strong>{{ proveedor.nombre }}</strong></td>
+                            <td>{{ proveedor.telefono|default:'-' }}</td>
+                            <td>{{ proveedor.correo|default:'-' }}</td>
+                            <td>{{ proveedor.direccion|default:'-'|truncatechars:50 }}</td>
+                            <td>{{ proveedor.productos.count }}</td>
+                            <td>
+                                <div class="action-buttons-grid">
+                                    <a href="{% url 'admin_proveedor_detalle' proveedor.id %}" class="btn-detalle">Ver</a>
+                                    <a href="{% url 'admin_proveedor_editar' proveedor.id %}" class="btn-editar">Editar</a>
+                                    <button type="button" class="btn-eliminar" 
+                                        data-url="{% url 'admin_proveedor_eliminar' proveedor.id %}"
+                                        data-nombre="{{ proveedor.nombre }}"
+                                        onclick="openProvModal(this.dataset.url, this.dataset.nombre)">Eliminar</button>
+                                </div>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="7" class="no-proveedores">No hay proveedores registrados.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div id="modal-backdrop-prov" class="modal-backdrop" style="display: none;">
+        <div class="modal-content">
+            <h3>Confirmar Eliminación</h3>
+            <p>¿Eliminar al proveedor <strong id="modal-nombre-prov"></strong>?</p>
+            <div class="modal-warning">
+                <p><strong>⚠️ Advertencia:</strong> Esta acción no se puede deshacer.</p>
+                <p>Los productos quedarán con proveedor en blanco.</p>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn-cancelar" onclick="closeProvModal()">Cancelar</button>
+                <a href="#" id="modal-confirm-btn-prov" class="btn-confirmar btn-danger">Eliminar</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'vlastef_app/js/admin_panel/proveedores.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends 'vlastef_app/admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Detalle de Usuario | Panel de Administración{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/cliente_detalle.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    <div class="cliente-detalle-panel">
+        <div class="detalle-header">
+            <h1 class="detalle-title">Detalle del Usuario</h1>
+            <a href="{% url 'admin_clientes' %}" class="btn-volver">Volver a la lista</a>
+        </div>
+
+        <div class="detalle-card">
+            <div class="detalle-section">
+                <h3>Información de Usuario</h3>
+                <div class="detalle-grid">
+                    <div class="detalle-item">
+                        <span class="label">ID Usuario:</span>
+                        <span class="value">{{ cliente.usuario.id }}</span>
+                    </div>
+                    <div class="detalle-item">
+                        <span class="label">Username:</span>
+                        <span class="value">{{ cliente.usuario.username }}</span>
+                    </div>
+                    <div class="detalle-item">
+                        <span class="label">Email:</span>
+                        <span class="value">{{ cliente.usuario.email }}</span>
+                    </div>
+                    <div class="detalle-item">
+                        <span class="label">Estado:</span>
+                        <span class="value">
+                            {% if cliente.usuario.is_active %}
+                                <span class="estado-activo">Activo</span>
+                            {% else %}
+                                <span class="estado-inactivo">Inactivo</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="detalle-item">
+                        <span class="label">Staff (Admin):</span>
+                        <span class="value">
+                            {% if cliente.usuario.is_staff %}
+                                <span class="estado-activo">Sí</span>
+                            {% else %}
+                                <span class="value">No</span>
+                            {% endif %}
+                        </span>
+                    </div>
+                    <div class="detalle-item">
+                        <span class="label">Último acceso:</span>
+                        <span class="value">{{ cliente.usuario.last_login|default:"Nunca" }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="detalle-section">
+                <h3>Información Personal</h3>
+                <div class="detalle-grid">
+                    <div class="detalle-item">
+                        <span class="label">Nombres:</span>
+                        <span class="value">{{ cliente.nombres }}</span>
+                    </div>
+                    <div class="detalle-item">
+                        <span class="label">Apellidos:</span>
+                        <span class="value">{{ cliente.apellidos }}</span>
+                    </div>
+                    <div class="detalle-item">
+                        <span class="label">Teléfono:</span>
+                        <span class="value">{{ cliente.telefono|default:"No registrado" }}</span>
+                    </div>
+                    <div class="detalle-item">
+                        <span class="label">Dirección:</span>
+                        <span class="value">{{ cliente.direccion|default:"No registrada" }}</span>
+                    </div>
+                    <div class="detalle-item">
+                        <span class="label">Fecha de Nacimiento:</span>
+                        <span class="value">{{ cliente.fecha_nacimiento|date:"d/m/Y"|default:"No registrada" }}</span>
+                    </div>
+                    <div class="detalle-item">
+                        <span class="label">Sexo:</span>
+                        <span class="value">{{ cliente.get_sexo_display }}</span>
+                    </div>
+                    <div class="detalle-item">
+                        <span class="label">Fecha de Registro:</span>
+                        <span class="value">{{ cliente.fecha_registro|date:"d/m/Y H:i" }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

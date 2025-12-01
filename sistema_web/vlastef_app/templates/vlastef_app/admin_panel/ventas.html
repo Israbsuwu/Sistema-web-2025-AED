@@ -1,0 +1,61 @@
+{% extends 'vlastef_app/admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}Ventas | Panel de Administración{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/ventas.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    <div class="ventas-panel">
+        <h1 class="ventas-title">Ventas</h1>
+        <p class="ventas-count">Total de ventas: {{ total_ventas }}</p>
+        <div class="ventas-actions">
+            <form method="get" class="ventas-search-form">
+                <input type="text" name="q" placeholder="Buscar por factura o cliente..." value="{{ query|default:'' }}" class="ventas-search-input">
+                <button type="submit" class="ventas-search-btn">Buscar</button>
+            </form>
+        </div>
+        <div class="ventas-table-wrapper">
+            <table class="ventas-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Factura</th>
+                        <th>Cliente</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Método Pago</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for venta in ventas %}
+                    <tr>
+                        <td>{{ venta.id }}</td>
+                        <td><strong>{{ venta.numero_factura }}</strong></td>
+                        <td>{{ venta.cliente.usuario.username }}</td>
+                        <td>{{ venta.fecha|date:'d/m/Y H:i' }}</td>
+                        <td>${{ venta.total }}</td>
+                        <td>{{ venta.get_metodo_pago_display }}</td>
+                        <td>
+                            <span class="estado-badge estado-{{ venta.estado }}">
+                                {{ venta.get_estado_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons-grid">
+                                <a href="{% url 'admin_venta_detalle' venta.id %}" class="btn-detalle">Ver Detalle</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                        <tr><td colspan="8" class="no-ventas">No hay ventas registradas.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

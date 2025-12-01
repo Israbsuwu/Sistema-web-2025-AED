@@ -1,0 +1,262 @@
+/* Estilos para cliente_editar.html */
+.cliente-editar-panel {
+    max-width: 800px;
+    margin: 32px auto;
+    padding: 0 20px;
+}
+.editar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+.editar-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4c1d95;
+}
+.btn-volver {
+    background: #5b2bd6;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: background 0.2s;
+}
+.btn-volver:hover {
+    background: #4321a8;
+    color: #fff;
+}
+.editar-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    padding: 32px;
+}
+.form-section {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e5e7eb;
+    }
+.form-section:last-of-type {
+    border-bottom: none;
+}
+.form-section h3 {
+    font-size: 1.1rem;
+    color: #1f2937;
+    margin-bottom: 16px;
+}
+.form-group {
+    margin-bottom: 16px;
+}
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+.form-row .form-group:first-child {
+    margin-right: 10px;
+}
+.form-row .form-group {
+    flex: 1;
+}
+.form-group label {
+    display: block;
+    font-size: 0.9rem;
+    color: #4b5563;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.form-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+.form-input:focus {
+    border-color: #5b2bd6;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(91, 43, 214, 0.1);
+}
+.form-input.disabled {
+    background: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+.form-actions {
+    margin-top: 24px;
+    text-align: right;
+}
+.btn-guardar {
+    background: #5b2bd6;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.btn-guardar:hover {
+    background: #4321a8;
+}
+.btn-reset-password {
+    background: #f59e0b;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+.btn-reset-password:hover {
+    background: #d97706;
+}
+.btn-confirm-reset {
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 8px;
+}
+.btn-confirm-reset:hover {
+    background: #dc2626;
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modal-content {
+    background: #fff;
+    padding: 32px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: slideUp 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Botones del modal */
+.modal-actions .btn-cancelar {
+    background: #6b7280;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.2s;
+}
+.modal-actions .btn-cancelar:hover { background: #4b5563; }
+
+.modal-actions .btn-confirmar {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+    color: #fff;
+}
+.modal-actions .btn-danger { background: #ef4444; }
+.modal-actions .btn-danger:hover { background: #dc2626; }
+
+/* Contenedor de acciones del modal (alineación) */
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* Área de restablecer contraseña */
+.password-reset-area {
+    display: none;
+    margin-top: 12px;
+    background: #f8fafc;
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+/* Grupo inline para checkbox de staff */
+.form-group-inline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+}
+.label-clickable {
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.alert {
+    padding: 16px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    min-width: 300px;
+    text-align: center;
+    animation: slideDown 0.4s ease-out;
+}
+
+.alert.error {
+    background: #fee2e2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.alert.success {
+    background: #dcfce7;
+    color: #15803d;
+    border: 1px solid #bbf7d0;
+}
+
+@keyframes slideDown {
+    from {
+        top: -100px;
+        opacity: 0;
+    }
+    to {
+        top: 20px;
+        opacity: 1;
+    }
+}

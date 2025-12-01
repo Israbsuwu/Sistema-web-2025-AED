@@ -1,0 +1,70 @@
+{% extends 'vlastef_app/admin_panel/base.html' %}
+{% load static %}
+
+{% block title %}{{ titulo }} | Proveedores{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'vlastef_app/css/admin_panel/proveedores.css' %}">
+{% endblock %}
+
+{% block main_content %}
+    <div class="proveedor-form-panel">
+        <div class="form-header">
+            <h1 class="proveedor-form-title">{{ titulo }}</h1>
+        </div>
+
+        <div class="form-card">
+            <form method="post" class="proveedor-form" id="proveedor-form" novalidate>
+                {% csrf_token %}
+
+                {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                            <div class="alert {{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {{ form.non_field_errors }}
+                    </div>
+                {% endif %}
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_nombre">Nombre *</label>
+                        {{ form.nombre }}
+                    </div>
+                    <div class="form-group">
+                        <label for="id_correo">Correo</label>
+                        {{ form.correo }}
+                        <small class="hint">Debe ser único si lo proporcionas.</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="id_telefono">Teléfono</label>
+                        {{ form.telefono }}
+                        <div class="error-text">{{ form.telefono.errors }}</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="id_direccion">Dirección</label>
+                        {{ form.direccion }}
+                        <div class="error-text">{{ form.direccion.errors }}</div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-guardar">Guardar</button>
+                    <a href="{% url 'admin_proveedores' %}" class="btn-cancelar">Cancelar</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'vlastef_app/js/admin_panel/proveedor_form.js' %}"></script>
+{% endblock %}
