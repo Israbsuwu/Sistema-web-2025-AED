@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayuda - Moda VLASTEF</title>
+    <link rel="stylesheet" href="help_Style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div class="container">
+        <header class="header">
+            <h1>Centro de Ayuda</h1>
+            <p class="subtitle">Soporte técnico para el sistema <span class="brand">Moda VLASTEF</span></p>
+        </header>
+
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>¿Por qué no puedo generar una factura?</span>
+                    <i class="fas fa-chevron-down arrow"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Generalmente esto ocurre cuando faltan datos obligatorios del cliente (RUC/Cédula o Dirección). Asegúrese de que el perfil del cliente esté completo antes de emitir la factura. También verifique que la sesión no haya caducado.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>El producto no aparece en el catálogo</span>
+                    <i class="fas fa-chevron-down arrow"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Si un producto no es visible en el catálogo de Moda VLASTEF, verifique dos cosas:
+                    1. Que el stock sea mayor a 0 en el inventario.
+                    2. Que el estado del producto esté marcado como "Activo". Los productos inactivos se ocultan automáticamente.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>¿Cómo corrijo el stock si hubo un error de conteo?</span>
+                    <i class="fas fa-chevron-down arrow"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Diríjase al módulo de <strong>Inventario > Ajustes</strong>. No elimine el producto. Cree un movimiento de "Ajuste de Salida" o "Ajuste de Entrada" y agregue una nota explicativa para mantener la trazabilidad de la auditoría.</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>El sistema está lento o no carga las imágenes</span>
+                    <i class="fas fa-chevron-down arrow"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Esto suele deberse a una conexión inestable o a una caché saturada. Intente presionar <code>Ctrl + F5</code> para recargar forzosamente la página. Si sube imágenes de prendas, asegúrese de que estén optimizadas y no pesen más de 2MB cada una.</p>
+                </div>
+            </div>
+
+             <div class="faq-item">
+                <div class="faq-question">
+                    <span>He olvidado mi contraseña de acceso</span>
+                    <i class="fas fa-chevron-down arrow"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Por seguridad, el sistema no permite ver contraseñas anteriores. Debe solicitar al Administrador del sistema que restablezca su credencial desde el módulo de "Usuarios". Se le asignará una temporal que deberá cambiar al ingresar.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-support">
+            <p>¿No encuentras la solución?</p>
+            <button class="btn-contact">Contactar Soporte IT</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="help_Script.js"></script>
+</body>
+</html>
