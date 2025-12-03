@@ -1,0 +1,141 @@
+/* Importar fuente limpia */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+
+:root {
+    --primary-purple: #6c5ce7;
+    --dark-purple: #4834d4;
+    --light-bg: #fdfbfb;
+    --white: #ffffff;
+    --text-color: #2d3436;
+    --gray-text: #636e72;
+    --border-radius: 12px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: var(--light-bg);
+    color: var(--text-color);
+    line-height: 1.6;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin-top: 40px;
+}
+
+/* Header */
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header h1 {
+    font-size: 2.5rem;
+    color: var(--dark-purple);
+    font-weight: 600;
+}
+
+.subtitle {
+    color: var(--gray-text);
+}
+
+.brand {
+    color: var(--primary-purple);
+    font-weight: bold;
+}
+
+/* FAQ Container */
+.faq-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.faq-item {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.05);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+.faq-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(108, 92, 231, 0.1);
+}
+
+/* Pregunta (Clickable) */
+.faq-question {
+    padding: 20px 25px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+    color: var(--dark-purple);
+    user-select: none;
+}
+
+.faq-question span {
+    font-size: 1.05rem;
+}
+
+.arrow {
+    transition: transform 0.3s ease; /* Fallback CSS si falla JS */
+    color: var(--primary-purple);
+}
+
+/* Respuesta (Oculta inicialmente) */
+.faq-answer {
+    height: 0;
+    overflow: hidden;
+    background-color: #faf9ff; /* Un morado muy muy suave para el fondo de respuesta */
+}
+
+.faq-answer p {
+    padding: 20px 25px;
+    color: var(--gray-text);
+    font-size: 0.95rem;
+    border-top: 1px solid rgba(108, 92, 231, 0.1);
+}
+
+/* Botón de contacto extra */
+.contact-support {
+    text-align: center;
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.btn-contact {
+    margin-top: 10px;
+    padding: 12px 30px;
+    background-color: var(--primary-purple);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background 0.3s;
+}
+
+.btn-contact:hover {
+    background-color: var(--dark-purple);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .header h1 { font-size: 2rem; }
+    .faq-question { padding: 15px 20px; }
+    .faq-question span { font-size: 0.95rem; }
+}
