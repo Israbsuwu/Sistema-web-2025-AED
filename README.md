@@ -32,9 +32,9 @@ cd sistema_web
 ```bash
 bd_web
 ```
-\Tu contraseña de postgres debe ser la misma que la de "settings.py" igualmente el usuario debe ser el mismo.\
-Si no es el mismo entonces modifica el settings.py poniendo tu USER y PASSWORD igualito al que tienes en postgres.\
-Eso se encuentra a partir de la línea 82 y 83 de settings.py, después guarda los cambios y procede con los siguientes pasos.\
+Tanto el USER como el PASSWORD de su PostgreSQL debe de ser el mismo que está puesto en el "settings.py" del proyecto.
+Si no es el mismo entonces modifica el settings.py poniendo tu USER y PASSWORD igualito al que tienes en postgres.
+Eso se encuentra a partir de la línea 82 y 83 de settings.py, después guarda los cambios y procede con los siguientes pasos.
 
 7. Ahora volviendo al proyecto realiza las migraciones:
 
