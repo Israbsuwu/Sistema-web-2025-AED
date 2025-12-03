@@ -26,6 +26,15 @@ class Producto(models.Model):
     precio_venta = models.DecimalField(max_digits=10, decimal_places=2)
     cantidad_disponible = models.PositiveIntegerField(default=0)
     imagen = models.ImageField(upload_to='productos/', blank=True, null=True)
+    colores = models.CharField(max_length=200, blank=True, null=True, help_text='Colores disponibles separados por coma')
+    tallas = models.CharField(max_length=100, blank=True, null=True, help_text='Tallas disponibles separados por coma')
+    GENERO_CHOICES = [
+        ('H', 'Hombre'),
+        ('M', 'Mujer'),
+        ('A', 'Ambos'),
+        ('N', 'No especificado'),
+    ]
+    genero = models.CharField(max_length=1, choices=GENERO_CHOICES, default='N')
 
     proveedor = models.ForeignKey(Proveedor, on_delete=models.SET_NULL, null=True, related_name='productos')
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, related_name='productos')
@@ -45,6 +54,7 @@ class Cliente(models.Model):
     ])
     direccion = models.TextField(blank=True, null=True)
     telefono = models.CharField(max_length=20, blank=True, null=True)
+    foto = models.ImageField(upload_to='clientes/', blank=True, null=True)
     fecha_registro = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -78,11 +88,14 @@ class CarritoDetalle(models.Model):
     producto = models.ForeignKey(Producto, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField(default=1)
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
+    talla = models.CharField(max_length=50, blank=True, null=True)
+    color = models.CharField(max_length=50, blank=True, null=True)
+
     class Meta:
-        unique_together = ('carrito', 'producto')
+        unique_together = ('carrito', 'producto', 'talla', 'color')
 
     def __str__(self):
-        return f"{self.cantidad} x {self.producto.nombre} - Subtotal: {self.subtotal}"
+        return f"{self.cantidad} x {self.producto.nombre} ({self.talla}, {self.color}) - Subtotal: {self.subtotal}"
 
 
 class Venta(models.Model):
@@ -115,9 +128,11 @@ class DetalleVenta(models.Model):
     cantidad = models.PositiveIntegerField(default=1)
     precio_unitario = models.DecimalField(max_digits=10, decimal_places=2)
     subtotal = models.DecimalField(max_digits=10, decimal_places=2)
+    talla = models.CharField(max_length=50, blank=True, null=True)
+    color = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.cantidad} x {self.producto.nombre}"
+        return f"{self.cantidad} x {self.producto.nombre} ({self.talla}, {self.color})"
 
 
 class Stock(models.Model):

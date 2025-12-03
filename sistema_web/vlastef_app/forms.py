@@ -140,12 +140,34 @@ class LoginForm(forms.Form):
 
 # Formulario para productos (admin)
 class ProductoForm(forms.ModelForm):
+    def clean_colores(self):
+        colores = self.cleaned_data.get('colores', '')
+        if colores:
+            items = [c.strip() for c in colores.split(',') if c.strip()]
+            for color in items:
+                if not re.fullmatch(r'[A-Za-zÁÉÍÓÚáéíóúÑñ ]+', color):
+                    raise forms.ValidationError('Cada color debe contener solo letras y estar separado por comas. Ejemplo: rojo, azul, negro')
+            return ', '.join(items)
+        return colores
+
+    def clean_tallas(self):
+        tallas = self.cleaned_data.get('tallas', '')
+        if tallas:
+            items = [t.strip() for t in tallas.split(',') if t.strip()]
+            for talla in items:
+                # Permite letras (S, M, L, XL) o números con un decimal (35, 36.5)
+                if not re.fullmatch(r'([A-Za-z]{1,3}|\d{1,2}(\.\d)?)', talla):
+                    raise forms.ValidationError('Cada talla debe ser solo letras (S, M, XL) o números (35, 36.5), separados por comas.')
+            return ', '.join(items)
+        return tallas
+
     cantidad_disponible = forms.IntegerField(required=False, min_value=0, widget=forms.NumberInput(attrs={'class': 'form-input', 'min': '0', 'step': '1', 'placeholder': '0', 'inputmode': 'numeric'}))
+
     class Meta:
         model = Producto
         fields = [
             'nombre', 'descripcion', 'precio_real', 'precio_venta', 'cantidad_disponible',
-            'imagen', 'categoria', 'proveedor'
+            'imagen', 'categoria', 'proveedor', 'colores', 'tallas', 'genero'
         ]
         widgets = {
             'descripcion': forms.Textarea(attrs={'rows': 3, 'class': 'form-input', 'placeholder': 'Describe el producto (opcional)'}),
@@ -156,6 +178,9 @@ class ProductoForm(forms.ModelForm):
             'imagen': forms.FileInput(attrs={'class': 'form-input'}),
             'categoria': forms.Select(attrs={'class': 'form-input'}),
             'proveedor': forms.Select(attrs={'class': 'form-input'}),
+            'colores': forms.Textarea(attrs={'class': 'form-input', 'rows': 2, 'placeholder': 'Ejemplo: rojo, azul, negro'}),
+            'tallas': forms.Textarea(attrs={'class': 'form-input', 'rows': 2, 'placeholder': 'Ejemplo: S, M o 35, 36.5'}),
+            'genero': forms.Select(attrs={'class': 'form-input'}),
         }
 
     def clean_nombre(self):
@@ -234,12 +259,14 @@ class ProveedorForm(forms.ModelForm):
 
     def clean_correo(self):
         correo = self.cleaned_data.get('correo')
-        if correo:
-            qs = Proveedor.objects.filter(correo__iexact=correo)
-            if self.instance.pk:
-                qs = qs.exclude(pk=self.instance.pk)
-            if qs.exists():
-                raise forms.ValidationError('Ya existe un proveedor con ese correo.')
+        if not correo:
+            return None
+            
+        qs = Proveedor.objects.filter(correo__iexact=correo)
+        if self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise forms.ValidationError('Ya existe un proveedor con ese correo.')
         return correo
 
     def clean_telefono(self):

@@ -35,7 +35,11 @@
                         <td><strong>{{ carrito.cliente.usuario.username }}</strong></td>
                         <td>{{ carrito.fecha_creacion|date:'d/m/Y H:i' }}</td>
                         <td>
-                            {% if carrito.activo %}
+                            {% if not carrito.cliente.usuario.is_active %}
+                                <span class="estado-inactivo" title="El usuario está desactivado">Inactivo (Usuario)</span>
+                            {% elif carrito.items_count == 0 %}
+                                <span class="estado-inactivo" title="El carrito está vacío">Inactivo (Vacío)</span>
+                            {% elif carrito.activo %}
                                 <span class="estado-activo">Activo</span>
                             {% else %}
                                 <span class="estado-inactivo">Cerrado</span>

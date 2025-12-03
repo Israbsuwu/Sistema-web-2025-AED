@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @page {
+            size: letter landscape;
+            margin: 1cm;
+        }
+        body {
+            font-family: Helvetica, sans-serif;
+            font-size: 9pt;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 4px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        /* Column Widths */
+        .col-id { width: 5%; }
+        .col-nombre { width: 20%; }
+        .col-cat { width: 15%; }
+        .col-prov { width: 15%; }
+        .col-precio { width: 10%; }
+        .col-stock { width: 8%; }
+        .col-desc { width: 27%; }
+        
+        .stock-bajo { color: #d35400; font-weight: bold; }
+        .stock-agotado { color: red; font-weight: bold; }
+        .stock-ok { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Reporte de Productos</h1>
+    <table>
+        <thead>
+            <tr>
+                <th class="col-id">ID</th>
+                <th class="col-nombre">Nombre</th>
+                <th class="col-cat">Categoría</th>
+                <th class="col-prov">Proveedor</th>
+                <th class="col-precio">Precio</th>
+                <th class="col-stock">Stock</th>
+                <th class="col-desc">Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prod in productos %}
+            <tr>
+                <td>{{ prod.id }}</td>
+                <td>
+                    <div>{{ prod.nombre }}</div>
+                </td>
+                <td>
+                    <div>{{ prod.categoria.nombre }}</div>
+                </td>
+                <td>
+                    <div>{{ prod.proveedor.nombre }}</div>
+                </td>
+                <td>C${{ prod.precio_venta }}</td>
+                <td class="{% if prod.cantidad_disponible == 0 %}stock-agotado{% elif prod.cantidad_disponible < 10 %}stock-bajo{% else %}stock-ok{% endif %}">
+                    {{ prod.cantidad_disponible }}
+                </td>
+                <td>
+                    <div>{{ prod.descripcion|truncatechars:100 }}</div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

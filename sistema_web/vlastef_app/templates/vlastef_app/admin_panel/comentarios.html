@@ -49,7 +49,7 @@
                         <td>{{ comentario.fecha|date:'d/m/Y H:i' }}</td>
                         <td>
                             <div class="action-buttons-grid">
-                                <a href="#" class="btn-ver" title="Ver producto en catálogo (próximamente)">Ver</a>
+                                <a href="{% url 'catalogo_ver_producto' comentario.producto.id %}?cid={{ comentario.id }}" class="btn-ver" title="Ver comentario en catálogo">Ver</a>
                                 <button type="button" class="btn-eliminar"
                                     data-url="{% url 'admin_comentario_eliminar' comentario.id %}"
                                     data-cliente="{{ comentario.cliente.usuario.username }}"

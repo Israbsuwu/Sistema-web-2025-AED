@@ -1,3 +1,4 @@
+/* ...existing code... */
 :root{
   --purple-600: #5b2bd6;
   --purple-500: #6f3be0;
@@ -45,7 +46,7 @@ body{
   background-blend-mode:overlay;
 }
 
-/* Pequeño bloque blanco translúcido para logo */
+/* pequeño bloque blanco translúcido para logo */
 .hero .brand{
   display:flex;
   align-items:center;
@@ -183,8 +184,8 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 25px;
-  margin-bottom: 10px;
+  margin-top: 32px;
+  margin-bottom: 0px;
 }
 .logo-grande img {
   width: 150px;

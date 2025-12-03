@@ -1,0 +1,207 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @page {
+            size: letter;
+            margin: 2cm;
+        }
+        body {
+            font-family: Helvetica, sans-serif;
+            font-size: 10pt;
+            color: #333;
+        }
+        .header {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        .title {
+            font-size: 36pt;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .invoice-number {
+            border: 2px solid #000;
+            border-radius: 20px;
+            padding: 5px 15px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 12pt;
+        }
+        .logo {
+            text-align: right;
+            font-size: 24pt;
+        }
+        .info-section {
+            width: 100%;
+            border: 2px solid #000;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            padding: 0;
+        }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .info-table td {
+            width: 50%;
+            padding: 15px;
+            vertical-align: top;
+        }
+        .info-table td:first-child {
+            border-right: 1px solid #000;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            font-size: 9pt;
+        }
+        .info-text {
+            font-size: 9pt;
+            line-height: 1.4;
+        }
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .items-table th {
+            background-color: #000;
+            color: #fff;
+            padding: 10px;
+            text-align: left;
+            font-weight: normal;
+        }
+        .items-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .totals-section {
+            width: 100%;
+            text-align: right;
+            margin-bottom: 30px;
+        }
+        .totals-table {
+            width: 40%;
+            margin-left: auto;
+        }
+        .totals-table td {
+            padding: 5px;
+        }
+        .payment-info {
+            border: 2px solid #000;
+            border-radius: 15px;
+            padding: 15px;
+            width: 45%;
+            float: left;
+        }
+        .footer {
+            text-align: right;
+            margin-top: 20px;
+        }
+        .thank-you {
+            background-color: #000;
+            color: #fff;
+            padding: 5px 20px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+        .website {
+            border: 2px solid #000;
+            border-radius: 15px;
+            padding: 5px 20px;
+            display: inline-block;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <table class="header">
+        <tr>
+            <td style="vertical-align: top;">
+                <div class="title">FACTURA</div>
+                <div class="invoice-number">Nº: {{ venta.numero_factura }}</div>
+            </td>
+            <td class="logo">
+                <img src="{% static 'vlastef_app/images/logo.png' %}" style="width: 80px; height: auto; margin-left: auto;">
+            </td>
+        </tr>
+    </table>
+
+    <div class="info-section">
+        <table class="info-table">
+            <tr>
+                <td>
+                    <div class="section-title">DATOS DEL CLIENTE</div>
+                    <div class="info-text">
+                        {{ venta.cliente.nombres }} {{ venta.cliente.apellidos }}<br>
+                        {{ venta.cliente.usuario.email }}<br>
+                        {{ venta.cliente.telefono|default:"-" }}<br>
+                        {{ venta.cliente.direccion|default:"-" }}
+                    </div>
+                </td>
+                <td>
+                    <div class="section-title">DATOS DE LA EMPRESA</div>
+                    <div class="info-text">
+                        Moda Vlastef<br>
+                        contacto@modavlastef.com<br>
+                        +505 8888-8888<br>
+                        Managua, Nicaragua
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <table class="items-table">
+        <thead>
+            <tr>
+                <th style="width: 40%;">Detalle</th>
+                <th style="width: 20%; text-align: center;">Cantidad</th>
+                <th style="width: 20%; text-align: right;">Precio</th>
+                <th style="width: 20%; text-align: right;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for detalle in venta.detalles.all %}
+            <tr>
+                <td>{{ detalle.producto.nombre }}</td>
+                <td style="text-align: center;">{{ detalle.cantidad }}</td>
+                <td style="text-align: right;">C${{ detalle.precio_unitario }}</td>
+                <td style="text-align: right;">C${{ detalle.subtotal }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="totals-section">
+        <table class="totals-table">
+            <tr>
+                <td colspan="2" style="padding-top: 10px;">
+                    <div style="background-color: #000; color: #fff; padding: 8px 15px; border-radius: 15px; display: flex; justify-content: space-between;">
+                        <span style="font-weight: bold;">TOTAL</span>
+                        <span style="font-weight: bold; float: right;">C${{ venta.total }}</span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div style="width: 100%;">
+        <div class="payment-info">
+            <div class="section-title">INFORMACIÓN DE PAGO</div>
+            <div class="info-text">
+                Fecha: {{ venta.fecha|date:"d/m/Y" }}
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="thank-you">GRACIAS</div><br>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @page {
+            size: letter landscape;
+            margin: 1cm;
+        }
+        body {
+            font-family: Helvetica, sans-serif;
+            font-size: 9pt;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 4px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        /* Column Widths */
+        .col-id { width: 6%; }
+        .col-factura { width: 10%; }
+        .col-fecha { width: 14%; }
+        .col-cliente { width: 20%; }
+        .col-metodo { width: 15%; }
+        .col-estado { width: 15%; }
+        .col-total { width: 15%; }
+    </style>
+</head>
+<body>
+    <h1>Reporte de Ventas</h1>
+    <table>
+        <thead>
+            <tr>
+                <th class="col-id">ID</th>
+                <th class="col-factura">Factura</th>
+                <th class="col-fecha">Fecha</th>
+                <th class="col-cliente">Cliente</th>
+                <th class="col-metodo">Método</th>
+                <th class="col-estado">Estado</th>
+                <th class="col-total">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for venta in ventas %}
+            <tr>
+                <td>{{ venta.id }}</td>
+                <td>#{{ venta.numero_factura }}</td>
+                <td>{{ venta.fecha|date:"d/m/Y H:i" }}</td>
+                <td>
+                    <div>{{ venta.cliente }}</div>
+                </td>
+                <td>
+                    <div>{{ venta.get_metodo_pago_display }}</div>
+                </td>
+                <td>
+                    <div>{{ venta.get_estado_display }}</div>
+                </td>
+                <td>C${{ venta.total }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

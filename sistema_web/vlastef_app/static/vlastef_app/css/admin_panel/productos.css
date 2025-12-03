@@ -49,7 +49,7 @@
 .productos-search-btn:hover {
     background: #5b21b6;
 }
-.btn-crear {
+.btn-crear, .btn-export {
     background: #22c55e;
     color: #fff;
     padding: 8px 18px;
@@ -59,10 +59,22 @@
     display: inline-flex;
     align-items: center;
     transition: background 0.2s;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
+    gap: 6px;
 }
 .btn-crear:hover {
     background: #16a34a;
 }
+
+.btn-pdf { background: #e74c3c; }
+.btn-pdf:hover { background: #c0392b; }
+
+.btn-excel { background: #27ae60; }
+.btn-excel:hover { background: #219150; }
+
 .productos-table-wrapper {
     background: #fff;
     border: 1px solid #e5e7eb;

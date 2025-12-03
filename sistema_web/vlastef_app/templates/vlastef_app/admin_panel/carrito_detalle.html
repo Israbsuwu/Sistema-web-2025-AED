@@ -18,7 +18,17 @@
             <div class="info-card">
                 <h3>Información del Carrito</h3>
                 <p><strong>Fecha Creación:</strong> {{ carrito.fecha_creacion|date:'d/m/Y H:i' }}</p>
-                <p><strong>Estado:</strong> {% if carrito.activo %}<span class="estado-activo">Activo</span>{% else %}<span class="estado-inactivo">Cerrado</span>{% endif %}</p>
+                <p><strong>Estado:</strong> 
+                    {% if not carrito.cliente.usuario.is_active %}
+                        <span class="estado-inactivo" title="El usuario está desactivado">Inactivo (Usuario)</span>
+                    {% elif not detalles %}
+                        <span class="estado-inactivo" title="El carrito está vacío">Inactivo (Vacío)</span>
+                    {% elif carrito.activo %}
+                        <span class="estado-activo">Activo</span>
+                    {% else %}
+                        <span class="estado-inactivo">Cerrado</span>
+                    {% endif %}
+                </p>
             </div>
             <div class="info-card">
                 <h3>Información del Cliente</h3>

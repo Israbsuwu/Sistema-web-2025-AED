@@ -16,6 +16,14 @@
                 <input type="text" name="q" placeholder="Buscar por factura o cliente..." value="{{ query|default:'' }}" class="ventas-search-input">
                 <button type="submit" class="ventas-search-btn">Buscar</button>
             </form>
+            <div class="export-buttons">
+                <a href="{% url 'export_ventas_pdf' %}" class="btn-export btn-pdf">
+                    <span class="icon">↓</span> Exportar PDF
+                </a>
+                <a href="{% url 'export_ventas_excel' %}" class="btn-export btn-excel">
+                    <span class="icon">↓</span> Exportar Excel
+                </a>
+            </div>
         </div>
         <div class="ventas-table-wrapper">
             <table class="ventas-table">
@@ -35,7 +43,7 @@
                     {% for venta in ventas %}
                     <tr>
                         <td>{{ venta.id }}</td>
-                        <td><strong>{{ venta.numero_factura }}</strong></td>
+                        <td><strong>#{{ venta.numero_factura }}</strong></td>
                         <td>{{ venta.cliente.usuario.username }}</td>
                         <td>{{ venta.fecha|date:'d/m/Y H:i' }}</td>
                         <td>${{ venta.total }}</td>

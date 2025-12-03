@@ -58,6 +58,35 @@
 }
 .ventas-search-btn:hover { background: #4321a8; }
 
+.export-buttons {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
+
+/* Botones de Exportación */
+.btn-export {
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.btn-pdf { background: #e74c3c; }
+.btn-pdf:hover { background: #c0392b; }
+
+.btn-excel { background: #27ae60; }
+.btn-excel:hover { background: #219150; }
+
 /* Tabla */
 .ventas-table-wrapper, .detalle-items-wrapper {
     background: #fff;

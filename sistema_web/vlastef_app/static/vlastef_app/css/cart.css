@@ -1,0 +1,35 @@
+/* Estilos del carrito - minimalista morado/blanco */
+:root{--brand:#c431c4;--bg:#fbf8ff;--card:#fff;--muted:#7d7a88;--shadow:0 12px 30px rgba(11,9,23,0.06)}
+body{background:linear-gradient(180deg,#fbf8ff 0%, #f6f1fb 100%);color:#222}
+.cart-wrap{max-width:1100px;margin:28px auto;padding:18px}
+.cart-card{background:var(--card);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
+.cart-header{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid #f3f1f6}
+.cart-header h2{margin:0;font-size:18px}
+.cart-body{display:flex;gap:18px;padding:18px;flex-wrap:wrap}
+.cart-items{flex:1;min-width:320px}
+.cart-summary{width:320px;background:#faf7ff;border-radius:10px;padding:16px;height:min-content}
+.item-row{display:flex;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #f3f1f6}
+.item-thumb{width:88px;height:88px;border-radius:8px;overflow:hidden;flex:0 0 88px}
+.item-thumb img{width:100%;height:100%;object-fit:cover}
+.item-info{flex:1;min-width:0}
+.item-title{font-weight:700;font-size:14px;margin-bottom:6px;color:#111}
+.item-meta{font-size:13px;color:var(--muted);margin-bottom:6px}
+.item-controls{display:flex;gap:8px;align-items:center}
+.qty-control{display:flex;align-items:center;gap:6px}
+.qty-control button{background:#fff;border:1px solid #eee;padding:6px 10px;border-radius:8px;cursor:pointer}
+.qty-control input{width:52px;text-align:center;padding:6px;border-radius:8px;border:1px solid #eee}
+.price{font-weight:800;color:var(--brand);min-width:88px;text-align:right}
+.remove-btn{background:transparent;border:0;color:#b00020;cursor:pointer}
+.controls-top{display:flex;justify-content:space-between;align-items:center;padding:12px 6px}
+.actions-row{display:flex;gap:8px}
+.btn{padding:10px 14px;border-radius:10px;border:0;cursor:pointer}
+.btn.primary{background:var(--brand);color:#fff}
+.btn.ghost{background:transparent;border:1px solid rgba(0,0,0,0.06)}
+.summary-row{display:flex;justify-content:space-between;padding:8px 0;color:var(--muted)}
+.summary-row.total{font-weight:800;color:#111}
+.empty{padding:40px;text-align:center;color:var(--muted)}
+
+@media (max-width:880px){
+  .cart-body{flex-direction:column}
+  .cart-summary{width:100%}
+}

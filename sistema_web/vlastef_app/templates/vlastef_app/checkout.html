@@ -1,0 +1,940 @@
+{% extends 'vlastef_app/layout.html' %}
+{% load static %}
+
+{% block title %}Finalizar Compra - Moda Vlastef{% endblock %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'vlastef_app/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'vlastef_app/css/cart.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Estilos específicos para los modales de pago */
+    .payment-overlay, .card-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    
+    .payment-modal, .card-modal {
+      background: white;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 12px;
+      overflow: hidden;
+      animation: slideIn 0.3s ease;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .payment-header, .card-header {
+      padding: 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .payment-header h3, .card-header h3 {
+      margin: 0;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .close-payment, .close-card {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+    }
+    
+    .close-payment:hover, .close-card:hover {
+      transform: scale(1.2);
+    }
+    
+    .payment-body, .card-body {
+      padding: 25px;
+    }
+    
+    .payment-methods {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+    
+    .payment-option {
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .payment-option:hover {
+      border-color: #667eea;
+      background: #f8f9ff;
+    }
+    
+    .payment-option.selected {
+      border-color: #667eea;
+      background: #f0f4ff;
+    }
+    
+    .payment-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: white;
+      flex-shrink: 0;
+    }
+    
+    .card-icon { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .paypal-icon { background: #003087; }
+    .cash-icon { background: linear-gradient(135deg, #4CAF50, #2E7D32); }
+    
+    .payment-option label {
+      flex: 1;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    
+    .payment-option input[type="radio"] {
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+    }
+    
+    .payment-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+    }
+    
+    .btn-continue, .submit-payment {
+      flex: 1;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: all 0.3s;
+    }
+    
+    .btn-continue:hover, .submit-payment:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+    
+    .btn-back {
+      padding: 15px 20px;
+      background: #f5f5f5;
+      color: #333;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .btn-back:hover {
+      background: #e0e0e0;
+    }
+
+    /* Form styles for card */
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; font-size: 14px; }
+    .form-input { width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px; box-sizing: border-box; transition: border 0.3s; }
+    .form-input:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+    .form-row { display: flex; gap: 15px; }
+    .form-row .form-group { flex: 1; }
+    .card-icons { display: flex; gap: 10px; margin-top: 5px; }
+    .card-brand { width: 40px; height: 25px; border-radius: 3px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; color: white; opacity: 0.3; transition: opacity 0.3s; }
+    .card-brand.active { opacity: 1; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+    .visa { background: linear-gradient(135deg, #1a1f71, #f7b600); }
+    .mastercard { background: linear-gradient(135deg, #eb001b, #f79e1b); }
+    .amex { background: linear-gradient(135deg, #2e77bb, #6ec9e0); }
+    
+    /* Topbar override */
+    .checkout-topbar {
+        background: transparent;
+        padding: 12px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .checkout-topbar .logo {
+        color: var(--brand, #667eea);
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+    /* New styles for quantity controls and item layout */
+    .item-row {
+        display: flex;
+        gap: 15px;
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .item-thumb {
+        width: 80px;
+        height: 80px;
+        border-radius: 6px;
+        overflow: hidden;
+        flex-shrink: 0;
+    }
+    .item-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .item-info {
+        flex: 1;
+        min-width: 200px;
+    }
+    .item-title {
+        font-weight: 700;
+        font-size: 16px;
+        margin-bottom: 5px;
+        color: #333;
+    }
+    .item-meta {
+        font-size: 14px;
+        color: var(--muted);
+        margin-bottom: 5px;
+    }
+    .item-price-unit {
+        font-size: 14px;
+        color: #333;
+        font-weight: 600;
+    }
+    .item-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    .qty-control {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    .qty-btn {
+        width: 30px;
+        height: 30px;
+        border: 1px solid #ddd;
+        background: white;
+        border-radius: 4px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #555;
+    }
+    .qty-btn:hover {
+        background: #f5f5f5;
+    }
+    .qty-input {
+        width: 40px;
+        text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+        font-size: 14px;
+    }
+    .item-subtotal-wrap {
+        text-align: right;
+        min-width: 100px;
+    }
+    .item-subtotal {
+        font-weight: 700;
+        color: var(--brand);
+        font-size: 18px;
+    }
+    .remove-btn {
+        background: none;
+        border: none;
+        color: #ff4444;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 5px;
+        margin-left: 10px;
+    }
+    .remove-btn:hover {
+        color: #cc0000;
+    }
+  </style>
+{% endblock %}
+
+{% block body %}
+  <!-- Topbar -->
+  <div class="checkout-topbar">
+    <a href="{% url 'catalogo_home' %}" class="logo">← Volver al catálogo</a>
+  </div>
+
+  <div class="cart-wrap">
+    <div class="cart-card">
+      <div class="cart-header">
+        <h2>Finalizar Compra</h2>
+        <span style="color: var(--muted); font-size: 14px;">Revisa tu pedido antes de pagar</span>
+      </div>
+
+      <div class="cart-body">
+        <!-- Items Column -->
+        <div class="cart-items">
+          {% for item in detalles %}
+          <div class="item-row" id="item-{{ item.id }}">
+            <div class="item-thumb">
+              <a href="{% url 'catalogo_ver_producto' item.producto.id %}">
+                {% if item.producto.imagen %}
+                  <img src="{{ item.producto.imagen.url }}" alt="{{ item.producto.nombre }}">
+                {% else %}
+                  <img src="{% static 'vlastef_app/images/no-image.png' %}" alt="Sin imagen">
+                {% endif %}
+              </a>
+            </div>
+            
+            <div class="item-info">
+              <div class="item-title">
+                <a href="{% url 'catalogo_ver_producto' item.producto.id %}" style="text-decoration: none; color: inherit;">
+                  {{ item.producto.nombre }}
+                </a>
+              </div>
+              <div class="item-meta">
+                Talla: {{ item.talla|default:'N/A' }} • Color: {{ item.color|default:'N/A' }}
+              </div>
+              <div class="item-price-unit">
+                Precio Unitario: C$ {{ item.producto.precio_venta }}
+              </div>
+            </div>
+
+            <div class="item-controls">
+                <div class="qty-control">
+                    <button type="button" class="qty-btn minus" data-id="{{ item.id }}" data-qty="{{ item.cantidad|add:'-1' }}" onclick="updateQuantity(this.dataset.id, this.dataset.qty)">-</button>
+                    <input type="text" class="qty-input" value="{{ item.cantidad }}" readonly>
+                    <button type="button" class="qty-btn plus" data-id="{{ item.id }}" data-qty="{{ item.cantidad|add:'1' }}" onclick="updateQuantity(this.dataset.id, this.dataset.qty)">+</button>
+                </div>
+                <button type="button" class="remove-btn" data-id="{{ item.id }}" onclick="removeItem(this.dataset.id)" title="Eliminar">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+
+            <div class="item-subtotal-wrap">
+                <div class="item-subtotal">C$ {{ item.subtotal }}</div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        <!-- Summary Column -->
+        <div class="cart-summary">
+          <!-- Subtotal removed as requested -->
+          
+          <div class="summary-row total">
+            <span>Total a Pagar</span>
+            <span id="cart-total">C$ {{ total }}</span>
+          </div>
+
+          <div style="margin-top: 20px;">
+              <button type="button" id="checkoutBtn" class="btn primary btn-block" style="width: 100%; padding: 12px; font-size: 16px;">
+                  <i class="fas fa-lock"></i> Proceder al Pago
+              </button>
+              <div style="text-align: center; margin-top: 15px; font-size: 12px; color: var(--muted);">
+                  <i class="fa-solid fa-lock"></i> Pago 100% Seguro
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL 1: SELECCIÓN DE MÉTODO DE PAGO ========== -->
+  <div id="paymentOverlay" class="payment-overlay">
+    <div class="payment-modal">
+      <div class="payment-header">
+        <h3><i class="fas fa-credit-card"></i> Selecciona método de pago</h3>
+        <button class="close-payment" id="closePayment">&times;</button>
+      </div>
+      
+      <div class="payment-body">
+        <div class="payment-methods">
+          <div class="payment-option" id="optionCard" onclick="selectPayment('card')">
+            <div class="payment-icon card-icon">
+              <i class="fas fa-credit-card"></i>
+            </div>
+            <label>
+              <strong>Tarjeta de crédito/débito</strong>
+              <div style="font-size: 14px; color: #666; margin-top: 4px;">
+                Paga con Visa, Mastercard, American Express
+              </div>
+            </label>
+            <input type="radio" name="paymentMethod" value="card">
+          </div>
+          
+          <div class="payment-option" id="optionPayPal" onclick="selectPayment('paypal')">
+            <div class="payment-icon paypal-icon">
+              <i class="fab fa-paypal"></i>
+            </div>
+            <label>
+              <strong>PayPal</strong>
+              <div style="font-size: 14px; color: #666; margin-top: 4px;">
+                Paga rápido y seguro con PayPal
+              </div>
+            </label>
+            <input type="radio" name="paymentMethod" value="paypal">
+          </div>
+          
+          <div class="payment-option" id="optionCash" onclick="selectPayment('cash')">
+            <div class="payment-icon cash-icon">
+              <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <label>
+              <strong>Pago contra entrega</strong>
+              <div style="font-size: 14px; color: #666; margin-top: 4px;">
+                Paga en efectivo cuando recibas tu pedido
+              </div>
+            </label>
+            <input type="radio" name="paymentMethod" value="cash">
+          </div>
+        </div>
+        
+        <div class="payment-actions">
+          <button id="continuePayment" class="btn-continue">
+            <i class="fas fa-arrow-right"></i>
+            <span>Continuar</span>
+          </button>
+          <button id="backToCart" class="btn-back">
+            <i class="fas fa-arrow-left"></i> Volver
+          </button>
+        </div>
+        
+        <div style="margin-top: 20px; text-align: center; font-size: 12px; color: #666;">
+          <i class="fas fa-shield-alt"></i> Pagos 100% seguros
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== MODAL 2: FORMULARIO DE TARJETA ========== -->
+  <div id="cardOverlay" class="card-overlay">
+    <div class="card-modal">
+      <div class="card-header">
+        <h3><i class="fas fa-credit-card"></i> Ingresa los datos de tu tarjeta</h3>
+        <button class="close-card" id="closeCard">&times;</button>
+      </div>
+      
+      <div class="card-body">
+        <div class="form-group">
+          <label for="cardNumber">Número de tarjeta</label>
+          <input type="text" id="cardNumber" class="form-input" placeholder="1234 5678 9012 3456" maxlength="19">
+          <div class="card-icons">
+            <div class="card-brand visa">VISA</div>
+            <div class="card-brand mastercard">MC</div>
+            <div class="card-brand amex">AMEX</div>
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label for="cardName">Nombre en la tarjeta</label>
+          <input type="text" id="cardName" class="form-input" placeholder="JUAN PEREZ">
+        </div>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cardExpiry">Fecha de expiración (MM/AA)</label>
+            <input type="text" id="cardExpiry" class="form-input" placeholder="MM/AA" maxlength="5">
+          </div>
+          
+          <div class="form-group">
+            <label for="cardCVC">Código de seguridad (CVC)</label>
+            <input type="password" id="cardCVC" class="form-input" placeholder="123" maxlength="4">
+          </div>
+        </div>
+        
+        <button id="submitCardPayment" class="submit-payment" style="margin-top: 20px;">
+          <i class="fas fa-lock"></i>
+          <span id="payButtonText">Pagar C${{ total }}</span>
+        </button>
+        
+        <div style="margin-top: 20px; text-align: center; font-size: 12px; color: #666;">
+          <i class="fas fa-shield-alt"></i> Tus datos están encriptados y protegidos
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message Overlay -->
+  <div id="messageOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:3000; justify-content:center; align-items:center;">
+      <div style="background:white; padding:30px; border-radius:12px; width:90%; max-width:400px; text-align:center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+          <div id="messageIcon" style="font-size: 50px; margin-bottom: 20px;"></div>
+          <h3 id="messageTitle" style="margin: 0 0 10px 0; color: #333;"></h3>
+          <p id="messageText" style="color: #666; margin-bottom: 25px; line-height: 1.5;"></p>
+          <button id="closeMessageBtn" style="background: #667eea; color: white; border: none; padding: 12px 30px; border-radius: 6px; font-size: 16px; cursor: pointer; transition: background 0.3s;">Entendido</button>
+      </div>
+  </div>
+
+  <!-- Delete Confirmation Overlay -->
+  <div id="deleteConfirmOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:3000; justify-content:center; align-items:center;">
+      <div style="background:white; padding:30px; border-radius:12px; width:90%; max-width:400px; text-align:center; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+          <div style="font-size: 50px; margin-bottom: 20px; color: #e74c3c;"><i class="fas fa-exclamation-triangle"></i></div>
+          <h3 style="margin: 0 0 10px 0; color: #333;">¿Eliminar producto?</h3>
+          <p style="color: #666; margin-bottom: 25px; line-height: 1.5;">¿Estás seguro de que deseas eliminar este producto de tu carrito?</p>
+          <div style="display: flex; gap: 10px; justify-content: center;">
+              <button id="cancelDeleteBtn" style="background: #f5f5f5; color: #333; border: none; padding: 12px 25px; border-radius: 6px; font-size: 16px; cursor: pointer; transition: background 0.3s;">Cancelar</button>
+              <button id="confirmDeleteBtn" style="background: #e74c3c; color: white; border: none; padding: 12px 25px; border-radius: 6px; font-size: 16px; cursor: pointer; transition: background 0.3s;">Eliminar</button>
+          </div>
+      </div>
+  </div>
+
+  <!-- Success Overlay -->
+  <div id="successOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; justify-content:center; align-items:center; flex-direction:column; color:white; text-align:center;">
+      <div style="font-size: 80px; color: #2ecc71; margin-bottom: 20px;"><i class="fas fa-check-circle"></i></div>
+      <h1 style="font-size: 40px; margin: 0;">Compra realizada con éxito</h1>
+      <div id="invoiceContainer" style="margin-top: 20px;"></div>
+      <p style="font-size: 18px; margin-top: 10px; color: #ddd;">Redirigiendo al menú principal...</p>
+  </div>
+
+  <!-- Hidden Form for Submission -->
+  <form id="checkoutForm" action="{% url 'process_payment' %}" method="POST" style="display:none;">
+    {% csrf_token %}
+    <input type="hidden" name="payment_method" id="paymentMethodInput">
+  </form>
+
+  <script>
+    // CSRF Token Helper
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    const csrftoken = getCookie('csrftoken');
+
+    // Message Modal Helper
+    function showModalMessage(title, text, isError = true) {
+        const overlay = document.getElementById('messageOverlay');
+        const icon = document.getElementById('messageIcon');
+        const titleEl = document.getElementById('messageTitle');
+        const textEl = document.getElementById('messageText');
+        
+        if(isError) {
+            icon.innerHTML = '<i class="fas fa-exclamation-circle" style="color: #e74c3c;"></i>';
+            titleEl.style.color = '#e74c3c';
+        } else {
+            icon.innerHTML = '<i class="fas fa-info-circle" style="color: #3498db;"></i>';
+            titleEl.style.color = '#333';
+        }
+        
+        titleEl.textContent = title;
+        textEl.textContent = text;
+        overlay.style.display = 'flex';
+    }
+
+    document.getElementById('closeMessageBtn').addEventListener('click', function() {
+        document.getElementById('messageOverlay').style.display = 'none';
+    });
+
+    // Card Validation Helpers
+    function validateLuhn(number) {
+        let sum = 0;
+        let isEven = false;
+        // Loop through values starting at the rightmost side
+        for (let i = number.length - 1; i >= 0; i--) {
+            let digit = parseInt(number.charAt(i));
+
+            if (isEven) {
+                digit *= 2;
+                if (digit > 9) {
+                    digit -= 9;
+                }
+            }
+
+            sum += digit;
+            isEven = !isEven;
+        }
+        return (sum % 10) == 0;
+    }
+
+    function getCardType(number) {
+        // Visa
+        if (/^4/.test(number)) return 'visa';
+        // Mastercard
+        if (/^5[1-5]/.test(number)) return 'mastercard';
+        // Amex
+        if (/^3[47]/.test(number)) return 'amex';
+        // Discover
+        if (/^6(?:011|5)/.test(number)) return 'discover';
+        return 'unknown';
+    }
+
+    // Update Quantity
+    function updateQuantity(prodId, newQty) {
+        if (newQty < 1) return;
+
+        fetch("{% url 'update_cart' %}", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body: JSON.stringify({
+                id: prodId,
+                qty: newQty
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Reload to update all values cleanly
+                location.reload();
+            } else {
+                showModalMessage('Error', 'Error al actualizar: ' + (data.error || 'Desconocido'));
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    let itemToDelete = null;
+
+    // Remove Item
+    function removeItem(prodId) {
+        itemToDelete = prodId;
+        const overlay = document.getElementById('deleteConfirmOverlay');
+        if(overlay) overlay.style.display = 'flex';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        const paymentOverlay = document.getElementById('paymentOverlay');
+        const cardOverlay = document.getElementById('cardOverlay');
+        const closePayment = document.getElementById('closePayment');
+        const closeCard = document.getElementById('closeCard');
+        const backToCart = document.getElementById('backToCart');
+        const continuePayment = document.getElementById('continuePayment');
+        const submitCardPayment = document.getElementById('submitCardPayment');
+        const checkoutForm = document.getElementById('checkoutForm');
+        const paymentMethodInput = document.getElementById('paymentMethodInput');
+        const successOverlay = document.getElementById('successOverlay');
+        
+        // Delete Modal Elements
+        const deleteConfirmOverlay = document.getElementById('deleteConfirmOverlay');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+
+        if(cancelDeleteBtn) {
+            cancelDeleteBtn.addEventListener('click', function() {
+                deleteConfirmOverlay.style.display = 'none';
+                itemToDelete = null;
+            });
+        }
+
+        if(confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', function() {
+                if(!itemToDelete) return;
+                
+                fetch("{% url 'remove_from_cart' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrftoken
+                    },
+                    body: JSON.stringify({
+                        id: itemToDelete
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        deleteConfirmOverlay.style.display = 'none';
+                        showModalMessage('Error', 'Error al eliminar: ' + (data.error || 'Desconocido'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    deleteConfirmOverlay.style.display = 'none';
+                });
+            });
+        }
+        
+        let selectedMethod = null;
+
+        // Open Payment Modal
+        if(checkoutBtn) {
+            checkoutBtn.addEventListener('click', function() {
+                paymentOverlay.style.display = 'flex';
+            });
+        }
+
+        // Close Modals
+        if(closePayment) closePayment.addEventListener('click', () => paymentOverlay.style.display = 'none');
+        if(backToCart) backToCart.addEventListener('click', () => paymentOverlay.style.display = 'none');
+        if(closeCard) closeCard.addEventListener('click', () => cardOverlay.style.display = 'none');
+
+        // Select Payment Method
+        window.selectPayment = function(method) {
+            selectedMethod = method;
+            document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+            document.querySelectorAll('input[name="paymentMethod"]').forEach(input => input.checked = false);
+            
+            const option = document.getElementById('option' + method.charAt(0).toUpperCase() + method.slice(1));
+            if(option) option.classList.add('selected');
+            
+            const input = document.querySelector(`input[value="${method}"]`);
+            if(input) input.checked = true;
+        };
+
+        // Continue Payment
+        if(continuePayment) {
+            continuePayment.addEventListener('click', function() {
+                if (!selectedMethod) {
+                    showModalMessage('Atención', 'Por favor selecciona un método de pago', false);
+                    return;
+                }
+
+                if (selectedMethod === 'paypal') {
+                    showModalMessage('Error', 'Error: No se pudo completar la operación con PayPal.');
+                    // Deselect
+                    selectedMethod = null;
+                    document.querySelectorAll('.payment-option').forEach(opt => opt.classList.remove('selected'));
+                    document.querySelectorAll('input[name="paymentMethod"]').forEach(input => input.checked = false);
+                    return;
+                }
+
+                if (selectedMethod === 'card') {
+                    paymentOverlay.style.display = 'none';
+                    cardOverlay.style.display = 'flex';
+                } else {
+                    // Submit for Cash (Efectivo)
+                    processPayment(selectedMethod);
+                }
+            });
+        }
+
+        // Card Input Formatting & Validation
+        const cardNumberInput = document.getElementById('cardNumber');
+        if(cardNumberInput) {
+            cardNumberInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                let formattedValue = '';
+                for (let i = 0; i < value.length; i++) {
+                    if (i > 0 && i % 4 === 0) formattedValue += ' ';
+                    formattedValue += value[i];
+                }
+                e.target.value = formattedValue;
+
+                // Detect Brand
+                const type = getCardType(value);
+                document.querySelectorAll('.card-brand').forEach(b => b.classList.remove('active'));
+                if(type !== 'unknown') {
+                    const brandEl = document.querySelector('.card-brand.' + type);
+                    if(brandEl) brandEl.classList.add('active');
+                }
+            });
+        }
+
+        // CVC Validation (Numbers only & Length based on Card Type)
+        const cardCVCInput = document.getElementById('cardCVC');
+        if(cardCVCInput) {
+            cardCVCInput.addEventListener('input', function(e) {
+                // Get current card number to determine type
+                const numInput = document.getElementById('cardNumber');
+                const numValue = numInput ? numInput.value.replace(/\s/g, '') : '';
+                const type = getCardType(numValue);
+                
+                // Determine max length (Amex uses 4, others 3)
+                let maxLength = 3;
+                if (type === 'amex') {
+                    maxLength = 4;
+                }
+                
+                // Enforce numbers only and max length
+                e.target.value = e.target.value.replace(/\D/g, '').slice(0, maxLength);
+            });
+        }
+
+        // Expiry Date Formatting (MM/YY)
+        const cardExpiryInput = document.getElementById('cardExpiry');
+        if(cardExpiryInput) {
+            cardExpiryInput.addEventListener('input', function(e) {
+                // Remove non-digits
+                let value = e.target.value.replace(/\D/g, '');
+                
+                // Limit to 4 digits (MMYY)
+                if (value.length > 4) value = value.slice(0, 4);
+                
+                // Add slash
+                if (value.length >= 2) {
+                    e.target.value = value.slice(0, 2) + '/' + value.slice(2);
+                } else {
+                    e.target.value = value;
+                }
+            });
+            
+            // Handle backspace to remove slash cleanly
+            cardExpiryInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && this.value.length === 3) {
+                    this.value = this.value.slice(0, 2);
+                    e.preventDefault();
+                }
+            });
+        }
+
+        // Submit Card Payment
+        if(submitCardPayment) {
+            submitCardPayment.addEventListener('click', function() {
+                const num = document.getElementById('cardNumber').value.replace(/\s/g, '');
+                const name = document.getElementById('cardName').value;
+                const exp = document.getElementById('cardExpiry').value;
+                const cvc = document.getElementById('cardCVC').value;
+
+                if(!num || !name || !exp || !cvc) {
+                    showModalMessage('Atención', 'Por favor completa todos los campos de la tarjeta', false);
+                    return;
+                }
+
+                // Validate Expiry Date
+                if (exp.length !== 5 || !exp.includes('/')) {
+                     showModalMessage('Error', 'Formato de fecha inválido (MM/AA)');
+                     return;
+                }
+
+                const [expMonth, expYear] = exp.split('/');
+                const currentYear = new Date().getFullYear() % 100; // Last 2 digits
+                const currentMonth = new Date().getMonth() + 1;
+                
+                const expM = parseInt(expMonth, 10);
+                const expY = parseInt(expYear, 10);
+
+                if (isNaN(expM) || isNaN(expY) || expM < 1 || expM > 12) {
+                    showModalMessage('Error', 'Mes inválido en la fecha de expiración');
+                    return;
+                }
+
+                if (expY < currentYear || (expY === currentYear && expM < currentMonth)) {
+                    showModalMessage('Error', 'La tarjeta está expirada');
+                    return;
+                }
+
+                if (!validateLuhn(num)) {
+                    showModalMessage('Error', 'Número de tarjeta inválido. Por favor verifica.');
+                    return;
+                }
+                
+                const type = getCardType(num);
+                if (type === 'unknown') {
+                    showModalMessage('Error', 'Tipo de tarjeta no reconocido.');
+                    return;
+                }
+
+                // Validate CVC Length
+                const requiredCvcLength = (type === 'amex') ? 4 : 3;
+                if (cvc.length !== requiredCvcLength) {
+                     showModalMessage('Error', `El CVC debe tener ${requiredCvcLength} dígitos para esta tarjeta.`);
+                     return;
+                }
+
+                // Submit form
+                processPayment('card');
+            });
+        }
+
+        function processPayment(method) {
+            const formData = new FormData();
+            formData.append('payment_method', method);
+            formData.append('csrfmiddlewaretoken', csrftoken);
+
+            fetch("{% url 'process_payment' %}", {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Hide modals
+                    paymentOverlay.style.display = 'none';
+                    cardOverlay.style.display = 'none';
+                    // Show success overlay
+                    successOverlay.style.display = 'flex';
+                    
+                    // Add invoice button and auto-open
+                    if (data.venta_id) {
+                        const invoiceContainer = document.getElementById('invoiceContainer');
+                        if (invoiceContainer) {
+                            const invoiceUrl = `/factura/${data.venta_id}/`;
+                            invoiceContainer.innerHTML = `
+                                <a href="${invoiceUrl}" target="_blank" class="btn-invoice" style="background-color: #fff; color: #333; padding: 12px 25px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-flex; align-items: center; gap: 10px; font-size: 18px; transition: transform 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                                    <i class="fas fa-file-invoice"></i> Descargar Factura
+                                </a>
+                            `;
+                            // Auto open in new tab
+                            window.open(invoiceUrl, '_blank');
+                        }
+                    }
+
+                    // Redirect after delay
+                    setTimeout(() => {
+                        window.location.href = "{% url 'catalogo_home' %}";
+                    }, 5000);
+                } else {
+                    showModalMessage('Error', 'Error: ' + (data.error || 'No se pudo procesar el pago'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showModalMessage('Error', 'Error de conexión');
+            });
+        }
+    });
+  </script>
+{% endblock %}

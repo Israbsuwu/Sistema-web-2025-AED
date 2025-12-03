@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        @page {
+            size: letter landscape;
+            margin: 1cm;
+        }
+        body {
+            font-family: Helvetica, sans-serif;
+            font-size: 9pt;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 4px;
+            text-align: left;
+            vertical-align: top;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        /* Column Widths - Adjusted for xhtml2pdf compatibility */
+        .col-id { width: 8%; }
+        .col-fecha { width: 15%; }
+        .col-prod { width: 25%; }
+        .col-tipo { width: 10%; }
+        .col-cant { width: 10%; }
+        .col-desc { width: 32%; }
+        
+        .entrada { color: green; }
+        .salida { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Reporte de Movimientos de Stock</h1>
+    <table>
+        <thead>
+            <tr>
+                <th class="col-id">ID</th>
+                <th class="col-fecha">Fecha</th>
+                <th class="col-prod">Producto</th>
+                <th class="col-tipo">Tipo</th>
+                <th class="col-cant">Cant.</th>
+                <th class="col-desc">Descripción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mov in movimientos %}
+            <tr>
+                <td>{{ mov.id }}</td>
+                <td>{{ mov.fecha|date:"d/m/Y H:i" }}</td>
+                <td>
+                    <div>{{ mov.producto.nombre|default:"Producto Eliminado" }}</div>
+                </td>
+                <td class="{% if mov.tipo == 'E' %}entrada{% else %}salida{% endif %}">
+                    {{ mov.get_tipo_display }}
+                </td>
+                <td>{{ mov.cantidad }}</td>
+                <td>
+                    <div>{{ mov.descripcion }}</div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

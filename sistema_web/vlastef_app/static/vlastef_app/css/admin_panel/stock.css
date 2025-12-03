@@ -55,6 +55,12 @@
     margin-bottom: 24px;
 }
 
+.stock-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 .stock-title, .form-title {
     font-size: 2rem;
     font-weight: 700;
@@ -189,7 +195,7 @@
 .text-muted { color: #94a3b8; font-size: 0.9rem; }
 
 /* Botones */
-.btn-crear {
+.btn-crear, .btn-export {
     background: #22c55e;
     color: #fff;
     padding: 8px 16px;
@@ -200,8 +206,18 @@
     align-items: center;
     gap: 6px;
     transition: background 0.2s;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 1rem;
 }
 .btn-crear:hover { background: #16a34a; }
+
+.btn-pdf { background: #e74c3c; }
+.btn-pdf:hover { background: #c0392b; }
+
+.btn-excel { background: #27ae60; }
+.btn-excel:hover { background: #219150; }
 
 .btn-volver {
 	background: #e5e7eb;

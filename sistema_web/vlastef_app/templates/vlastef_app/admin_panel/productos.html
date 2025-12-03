@@ -24,6 +24,14 @@
                 <input type="text" name="q" placeholder="Buscar producto..." value="{{ query|default:'' }}" class="productos-search-input">
                 <button type="submit" class="productos-search-btn">Buscar</button>
             </form>
+            <div class="export-buttons" style="display: flex; gap: 10px;">
+                <a href="{% url 'export_productos_pdf' %}" class="btn-export btn-pdf">
+                    <span class="icon">↓</span> Exportar PDF
+                </a>
+                <a href="{% url 'export_productos_excel' %}" class="btn-export btn-excel">
+                    <span class="icon">↓</span> Exportar Excel
+                </a>
+            </div>
             <a href="{% url 'admin_producto_crear' %}" class="btn-crear">Nuevo Producto</a>
         </div>
         <div class="productos-table-wrapper">
@@ -34,6 +42,9 @@
                         <th>Imagen</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
+                        <th>Colores</th>
+                        <th>Tallas</th>
+                        <th>Género</th>
                         <th>Costo Unitario</th>
                         <th>Costo de Venta</th>
                         <th>Cantidad</th>
@@ -55,6 +66,9 @@
                             </td>
                             <td><strong>{{ producto.nombre }}</strong></td>
                             <td>{{ producto.descripcion|default:"-"|truncatechars:50 }}</td>
+                            <td>{{ producto.colores|default:"-"|truncatechars:30 }}</td>
+                            <td>{{ producto.tallas|default:"-"|truncatechars:30 }}</td>
+                            <td>{{ producto.get_genero_display|default:"-" }}</td>
                             <td>C$ {{ producto.precio_real }}</td>
                             <td>C$ {{ producto.precio_venta }}</td>
                             <td>{{ producto.cantidad_disponible }}</td>

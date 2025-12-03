@@ -14,9 +14,17 @@
                 <h1 class="stock-title">Gestión de Stock</h1>
                 <p class="stock-subtitle">Historial de movimientos y control de inventario</p>
             </div>
-            <a href="{% url 'admin_stock_crear' %}" class="btn-crear">
-                <span class="icon">+</span> Registrar Movimiento
-            </a>
+            <div class="stock-actions">
+                <a href="{% url 'export_stock_pdf' %}" class="btn-export btn-pdf">
+                    <span class="icon">↓</span> Exportar PDF
+                </a>
+                <a href="{% url 'export_stock_excel' %}" class="btn-export btn-excel">
+                    <span class="icon">↓</span> Exportar Excel
+                </a>
+                <a href="{% url 'admin_stock_crear' %}" class="btn-crear">
+                    <span class="icon">+</span> Registrar Movimiento
+                </a>
+            </div>
         </div>
 
         <div class="stock-grid">

@@ -13,7 +13,7 @@
             <h2>¡Bienvenid@, {{ user.get_full_name|default:user.username }}!</h2>
             <p>Este es tu panel de administración.</p>
         </div>
-        <a href="{% url 'home' %}" class="btn-home-dashboard">Ir a la tienda</a>
+        <a href="{% url 'catalogo_home' %}" class="btn-home-dashboard">Ir a la tienda</a>
     </div>
 
     <div class="dashboard-cards">
